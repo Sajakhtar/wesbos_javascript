@@ -11,3 +11,5 @@
 * Relative file paths
     * same directory: `./file.js`
     * one directory up: `../file.js`
+* git
+* github
