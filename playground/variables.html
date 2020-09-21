@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variables</title>
+  </head>
+  <body>
+    <script>
+      // statements are ended with semicolon
+      // ASI = automatic semicolon insertion
+      // so can get away without writing semicolons, but better to use semicolons
+      // code blocks are bound by curly brackets, so don't need if statements e.g. if, loops, functions
+
+      // function call statement
+      console.log("hey");
+
+      // declaring a variable - 3 ways - var, let, const
+      // var and let can be updated
+      // const cannot be updated
+      // let and const introduced in ES6
+
+      // variable call statement
+      const first = "saj";
+      console.log(first);
+
+      let age = 300;
+
+      // updating variables, dont need to use var or let, simply reassign the variable
+      age = 110;
+
+      // const is a constant variable
+      const cool = true;
+
+      if (age > 10) {
+        console.log("you are old");
+      }
+
+      // Strict mode
+      dog = "snickers";
+      // have not declared using var or let, but dog variable will work as JS implies var or let,
+      // unless 'use strict' is used above
+      // 'use strict' with throw an error
+      // 'use strict' if forced by default when using JS modules
+      // JS modules is how you'll be writing all your modern JS
+
+      let cat; // declaring empty varible is fine, but will be type 'undefined'
+
+      // Scopiing
+      // where are my variables available to me?
+      // var is scoped differently to let and const
+      // var are function scoped variables i.e. only available inside parent function
+      // let and const are block scoped variables i.e. only available inside curly brackets {}
+
+      // What Wes Bos does
+      // uses const by default
+      // uses let if he knows variable will need to be changed in future
+      // almost never uses var
+
+      // Variable naming convention
+      // camelCase: myVariable
+      // snake_case: my_variable
+      // kebab-case not allowed in JS
+      // can start with letters, underscore or $ dollar sign
+      // underscore is synonmous with loadash library
+      // dollar sign is synonmous with jquery library
+      // only Classes start with capital letter or UpperCamelCase
+    </script>
+  </body>
+</html>

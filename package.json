@@ -1,0 +1,33 @@
+{
+  "name": "wesbos_js",
+  "version": "1.0.0",
+  "description": "* Chrome Dev Tools\r     * Shortcut for Console `Ctrl` `Shift` `J`\r     * Shortcut for Inspect Element `Ctrl` `Shift` `I`\r * Windows Command Prompt vs. Linux Terminal\r     * Clear: `cls` vs `clear`\r     * List directories: `dir` vs `ls`\r * Relative file paths\r     * same directory: `./file.js`\r     * one directory up: `../file.js`\r * Running and loading JS\r     * In command prompt/ terminal via node: `node file.js`\r * Tooling\r     * ESLint\r         * JS Linter tool\r         * to indentify/ report on JS issues (bad practices/ design patterns, unused variables/ functions)\r         * modifiable config - can use someone else's like from [wes bos](https://github.com/wesbos/eslint-config-wesbos)\r         * best practice to set the cofig locally, but can do globally \r         * pluggable - many plugins available e.g. for Vue, React, Angular, Prettier\r     * Prettier\r         * Formats code\r         * quit opinionated, only a few settings availabel to toggle\r * Node\r     * `npm init` via terminal for your project folder, in order to create a `package.json` file for depdendencies like ESLint and Prettier\r * git\r * github",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sajakhtar/wesbos_javascript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sajakhtar/wesbos_javascript/issues"
+  },
+  "homepage": "https://github.com/Sajakhtar/wesbos_javascript#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-wesbos": "^1.0.0",
+    "eslint-plugin-html": "^6.1.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "prettier": "^2.1.1"
+  }
+}
