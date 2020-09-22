@@ -39,7 +39,20 @@
   - Undefined
   - Symbol - unique identifier
 
-  -
-
+- Functions
+  - allow us to group together sets of statements
+  - functions take in data as arguements and can return a value
+  - functions vs parameters
+  - function vs method
+  - Built-in functions
+    - `Math.max(10,12)`
+    - `parseFloat('20.234234')`
+    - `parseInt('20.234234')`
+    - `Date.now()` returns number of milliseconds in epoch time (since 1st Jan 1970)
+    - `document.querySelector('p')`
+    - `navigator.vibrate(200)`, mobile functions
+    - `scrollTo(0,600)`
+    - `scrollTo({top: 500, left: 0, behaviour: 'smooth'})`
+- DRY - don't repeat your self, keep your code DRY
 - git
 - github
