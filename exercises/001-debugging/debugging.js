@@ -37,7 +37,7 @@ people.forEach((person, index) => {
 // Debugging methods
 /**
  * 98% of debugging is done with console.log, breakpoints and network requests
- * the other methods are handy in edge cases *
+ * the other methods are handy in edge cases
  */
 
 // Console Methods
