@@ -4,16 +4,16 @@ console.log(`it works`);
 
 // function definition
 function calculateBill(billAmount, taxRate = 0.1, tipRate = 0.15) {
-  // paremeters are placeholder in function
-  // parameters can have default values so that function still runs if not arguements is passed in when running
+        // paremeters are placeholder in function
+        // parameters can have default values so that function still runs if not arguements is passed in when running
 
-  // function body
-  console.log(`running calculateBill`);
-  // const total = 100 * 1.05;
-  const total = billAmount * (1 + taxRate + tipRate);
-  // total is a temp variable scoped inside the function block only
-  // console.log(total);
-  return total;
+        // function body
+        console.log(`running calculateBill`);
+        // const total = 100 * 1.05;
+        const total = billAmount * (1 + taxRate + tipRate);
+        // total is a temp variable scoped inside the function block only
+        // console.log(total);
+        return total;
 }
 
 // function call/ run
@@ -27,7 +27,7 @@ console.log(`Your total is ${myTotal}`);
 console.log(`Your total is ${calculateBill(120, 0.05)}`);
 console.log(`Your total is ${calculateBill(120)}`);
 
-// other variables can be used as arguements
+// other variables values can be used as arguements
 const jonBill = 250;
 const jonTax = 0.08;
 const jonTotal = calculateBill(jonBill, jonTax);
@@ -35,22 +35,24 @@ const jonTotal = calculateBill(jonBill, jonTax);
 console.log(`Jon's total is ${jonTotal}`);
 
 // passing expressions to a function
-console.log(`Your total is ${calculateBill(20 + 20 + 150 + 10)}`);
-console.log(`Your total is ${calculateBill(20 + 20 + 150 + 10, 0.07)}`);
+console.log(`Your total is $${calculateBill(20 + 20 + 150 + 10)}`);
+console.log(`Your total is $${calculateBill(20 + 20 + 150 + 10, 0.07)}`);
 
 // using default taxRate but not tipRate by using udefined
-console.log(`Your total is ${calculateBill(200, undefined, 0.2)}`);
+// i.e. using default param values by specifying undefined as the arg
+console.log(`Your total is $${calculateBill(200, undefined, 0.2)}`);
 
 // it's fine to use the same parameter names in different functions as parameter scope is restricted to the function
 
 // another function
 function doctorize(name = '') {
-  return `Dr. ${name}`;
+        return `Dr. ${name}`;
 }
 
 // another function
+// set default to empty string, else yell() will not work if no arg is provided
 function yell(name = '') {
-  return `HEY ${name.toUpperCase()}`;
+        return `HEY ${name.toUpperCase()}`;
 }
 
 // calling a function within a function

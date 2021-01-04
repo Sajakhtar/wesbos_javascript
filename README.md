@@ -31,9 +31,13 @@
   - pluggable - many plugins available e.g. for Vue, React, Angular, Prettier
 - Prettier
   - Formats code
-  - quit opinionated, only a few settings availabel to toggle
+  - quite opinionated, only a few settings availabel to toggle
 - Node
   - `npm init` via terminal for your project folder, in order to create a `package.json` file for depdendencies like ESLint and Prettier
+  - in terminal run `npx install-peerdeps --dev eslint-config-wesbos` to install wes bos eslint setup
+  - create new file `.eslintrc` to extend all of the wes bos eslint config by adding the following: `{ "extends": [ "wesbos" ] }`
+  - install ESLint Package for VS Code
+  - add [wes bos ESLint settings](https://github.com/wesbos/eslint-config-wesbos) in to the VS Code settings.json
 
 ### Types in JS
 
@@ -53,7 +57,9 @@
 
 - allow us to group together sets of statements
 - functions take in data as arguements and can return a value
-- functions vs parameters
+- arguements vs parameters
+  - parameters are placeholders
+  - arguements are the parameter values you pass into a function
 - function vs method
 - Built-in functions examples
   - `Math.max(10,12)`
@@ -65,6 +71,15 @@
   - `scrollTo(0,600)`
   - `scrollTo({top: 500, left: 0, behaviour: 'smooth'})`
 - DRY - don't repeat your self, keep your code DRY
+- Custom Functions
+  - normal functions
+  - anonymous functions - used in callbacks and IIFE
+  - function expressions i.e. stored as a variable
+  - arrow functions
+  - IIFE - Immediaely Invoked Function Expression
+  - Method - a function that lives inside an object
+  - callback function
+- Hoisting - Functions that are declared with a function keyword (i.e. normal function) are Hoisted. Meaning that JS takes all functions and hoists them up to the top of the file. So that anywhere you call the function, it will be available to you. So technically you can run a function before it is defined. JS does not hoist Function Expressions (variable functions)
 
 ### Debugging
 
@@ -75,7 +90,7 @@
   - console.table(), good for a list of objects
   - console.count(), shows how many times something has run
   - console.group() or console.groupCollapsed() with console.groupEnd(), useful for grouping all logs between into a collapsable group
-- **Callstack**
+- **Callstack or stack trace**
   - Tells you what function called what function
   - This will be important when going from one file to another
   - e.g. `go()` calls `doctorize()` and `greet()`, which calls `doesntExist()`
@@ -100,21 +115,22 @@
   - $0 is last element clicked, $1 is second last element clicked, and so on
   - $ and $\$ are shorthand selectors for elements
   - e.g. `$('p')` matches the first `<p>` element
-  - and `$$('p')` matches all `<p>` elements
+  - and `$$('p')` matches all `<p>` elements, returns array of all <p> elements
+  - This shorthand won't work if there is jQuery on the site
 - **Breakpoints**
-  - debugger; keyword will pause JS from running only when console is open
+  - `debugger;` keyword will pause JS from running only when console is open
   - this adds a breakpoint
   - the Sources tab shows the callstack, variables and their scope
   - and you can step over each line of code from there on
   - or click play to continue running code until you hit the next debugger
   - This is good if console loggging is overwhelming
-  - Be sure to remove 'debugger;' from your code
+  - Be sure to remove 'debugger;' from your code, though it only impacts the site if dev tools are open
   - Also, in the Sources tab, navigate to the .js file and click on any line to add a breakpoint
 - **Scope**
   - Scope will let us peer into what variables are
 - **Network Requests**
   - dev tools Network tab
-  - shows all the files need to make this site work
+  - shows all the files need to make this site work and requests being sent to different servers
   - in our case debugging.html, base.css, debugging.js, data:image/svg+xml, icanhazdadjoke.com
   - you can see info about the request: raw response (useful when looking at JSON), a preview and time taken (where the time was taken in that request)
   - e.g. for icanhazdadjoke.com request, 600ms used in waiting for the api to return the joke

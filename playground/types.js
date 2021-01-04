@@ -1,9 +1,12 @@
 /* eslint-disable */
+// ^ thats to disable eslint formatting so we can see strings in single and double quotes
 
 // TYPES
+// ********
+// ********
 
 // STRINGS
-
+// ********
 
 console.log('it works');
 
@@ -43,7 +46,7 @@ like
 pizza`;
 
 
-// Interpolation (variable inside string) and concatenation is better with backticks
+// Interpolation (variable inside string) and concatenation is better with backticks and useful when making html
 
 const hello = "hello, my name is " + name + ". Nice to meet you";
 
@@ -54,6 +57,7 @@ const html = `
     <div>
         <h2>${name}</h2>
         <p>${hello2}</p>
+        <p>I am ${1 + 100} years old</p>
     </div>
 `;
 
@@ -61,6 +65,7 @@ document.body.innerHTML = html;
 
 
 // NUMBERS
+// ********
 
 // there is only one type of number in JS, which covers int and float
 
@@ -110,7 +115,7 @@ console.log(`each kid gets ${eachkidgets} smarties and ${leftOver} smarties rema
 // In console: window.location = `https://${0.1+0.2}.com`;
 // https://0.30000000000000004.com/
 // since 0.1 + 0.2 = 0.30000000000000004
-// better to work with whole numbers i.e. cents rather than dollars
+// better to work with whole numbers i.e. cents rather than dollars, so 1034 cemts ratjerm than $10.34
 console.log(0.1 + 0.2);
 
 // infinity
@@ -123,6 +128,7 @@ console.log(typeof (10 / 'dog')); // NaN is a true number in JS
 
 
 // OBJECTS
+// ********
 
 // everything in JS is an object
 // Objects are used for collections of data and functionality
@@ -140,6 +146,7 @@ console.log(person['first'])
 
 
 // UNDEFINED and NULL
+// ********************
 
 // these are 2 ways to express nothing in JS
 
@@ -152,7 +159,7 @@ console.log(person.pet);
 // undefined = variable that has yet to be defined or object whose property doesn't exist
 // with undefined, the value has yet to be assgined
 
-// Null has to be explicitly set
+// Null has to be explicitly set to a value of nothing
 const somethingNull = null;
 console.log(somethingNull);
 
