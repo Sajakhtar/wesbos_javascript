@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function outer() {
+                const outerVar = 'Hey I am the outer var';
+                function inner() {
+                        const innerVar = 'Hey I am the inner var';
+                        console.log(innerVar);
+                        console.log(outerVar); // checks for variable in higher up scope and finds it one level up in outer() function
+                }
+                // inner();
+                // a closure is where you call the inner function at a later point in time, rether than in the parent function
+                // return the inner function
+                return inner;
+        }
+        // outer();
+
+        const innerFn = outer(); // this is function
+        innerFn(); // inner() can access innerVar and outerVar - this is a closure
+        // Javascript is able to create a function inside of functions and it can still reach out to the parent scope and even though the outer function is done running, it'll still maintain the parent variables in memory so that we can access them later
+
+        // closure for functions inside functions
+        function createGreeting(greeting = '') {
+                const myGreet = greeting.toLocaleUpperCase();
+                return function (name) {
+                        return `${myGreet} ${name}`;
+                };
+        }
+        // our inner scope references a variable that was created in the outer scope, this is referred to as a closure
+
+        const sayHello = createGreeting('hello');
+        const sayHey = createGreeting('hey');
+        console.log(sayHello('wes'));
+        console.log(sayHello('Jon'));
+        console.log(sayHey('jim'));
+
+        // closure to create private variables
+        function createGame(gameName) {
+                let score = 0;
+                return function win() {
+                        score++;
+                        return `Your ${gameName} score is ${score}`;
+                };
+        }
+
+        const hockeyGame = createGame('Hockey');
+        // whenever we createGame(), we create an empty score variable
+        // whever the innfer function win() runs, it'll increment the score variable from memory
+        // this allows us to maintain the score for multiple games
+        const soccerGame = createGame('Soccer');
+        // soccerGame() and hockeyGame() each have their own private variable for score
+    </script>
+</body>
+</html>
