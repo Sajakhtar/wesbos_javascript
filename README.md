@@ -204,6 +204,23 @@
     - we can create multiple instances of game(), where each instance will keep track of it's own score variable value, as if score is it's own private variable
 - Closure is the ability of an inner/ child function to access the variables from a higher level scope, even after the outer/ parent functions have been called/ closed over
 
+### Document Object Model (DOM)
+
+- this is what you see in the Elements panel of the Dev tools on any website
+- The Elements panel is not just the HTML, it the DOM, with which we can interface using JS e.g.
+  - listen for clicks, scrolls
+  - add/ remove/ modify elements (text, images, ...) on that webpage
+  - add/ remove classes to elements that can trigger CSS animations
+  - fetch new data, play music or video
+  - can add any type of interaction to the page
+- Core concepts of the DOM, such as events, elements and classes, transend the frameworks (React, Vue, Angular) even if the frameworks help take care of these concepts
+- Global Scope of the browser is called the **Window** object where all of the global variables are stored and helpful properties e.g. in the console:
+  - window.location or location
+  - window.innerWidth or innerWidth
+  - Think of the Window object as everything about the currently open window including browser bar, tabs, scrollbar
+- The **Document** object is responsible for everything from the opening HTML to the closing HTML tag
+- The **Navigator** object is at a higher level than the window that give info about browser and device (webcam, audio access, battery level, GPD Co-ords, )
+
 ### git
 
 ### github
