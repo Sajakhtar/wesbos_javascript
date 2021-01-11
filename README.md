@@ -2,6 +2,13 @@
 
 ## Notes
 
+1. [Chrome Dev Tools](###chrome-dev-tools)
+2. [Terminal](###windows-command-prompt-vs.-linux-terminal)
+3. [Relative file paths](###relative-file-paths)
+4. []()
+5. []()
+6. [Document Object Model (DOM)](<###document-object-model-(dom)>)
+
 ### Chrome Dev Tools
 
 - Shortcut for Console `Ctrl` `Shift` `J`
