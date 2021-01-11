@@ -1,13 +1,19 @@
 # Wes Bos [Beginner JavaScript](https://beginnerjavascript.com/) Course
 
-## Notes
+## Contents
 
 1. [Chrome Dev Tools](#chrome-dev-tools)
 2. [Terminal](#windows-command-prompt-vs.-linux-terminal)
 3. [Relative file paths](#relative-file-paths)
-4. [Hoisting](#hoisting)
-5. [Closures](#closures)
-6. [Document Object Model (DOM)](#document-object-model)
+4. [Running and loading JS](#running-and-loading-js)
+5. [Tooling](#tooling)
+6. [Types in JS](#types-in-js)
+7. [Functions](#functions)
+8. [Debugging](#debugging)
+9. [Scope](#scope)
+10. [Hoisting](#hoisting)
+11. [Closures](#closures)
+12. [Document Object Model (DOM)](#document-object-model)
 
 ### Chrome Dev Tools
 
@@ -213,7 +219,7 @@
 
 ### Document Object Model
 
-- a.k.a. the DOM
+- a.k.a. the **DOM**
 - this is what you see in the Elements panel of the Dev tools on any website
 - The Elements panel is not just the HTML, it the DOM, with which we can interface using JS e.g.
   - listen for clicks, scrolls
