@@ -233,7 +233,16 @@
   - window.innerWidth or innerWidth
   - Think of the Window object as everything about the currently open window including browser bar, tabs, scrollbar
 - The **Document** object is responsible for everything from the opening HTML to the closing HTML tag
-- The **Navigator** object is at a higher level than the window that give info about browser and device (webcam, audio access, battery level, GPD Co-ords, )
+- The **Navigator** object is at a higher level than the window that give info about browser and device (webcam, audio access, battery level, GPD Co-ords, ...)
+- **DOM: Selecting Elements**
+  -In index.html, best to place the JS `<script>` tag right before the closing body, else the JS run before it can observe the DOM
+  - Ways around that issue is to create a `function init() {...}` and below the function add `document.addEventListener('DOMContentLoaded', init)`
+  - Before interaction with elements on page, you first need to select the element, then you can listen for clicks, change content, add content, remove it
+  - Two main ways to select elements, `document.querySelector()` which gives one elements and `document.querySelectorAll()` gives all elements in a NodeList, like an array
+    - you can run `querySelector()` on any other element selected already selected to select it's children i.e. `mySelectedElement.querySelector('.item')`
+  - Before `.querySelector()` and `.querySelectorAll()` were introduced, you'd have to be more specific
+    - `document.getElementById`, `document.getElementsByClassName`, `document.getElementsByName`, `document.getElementsByTagName`, `document.getElementsByTagNameNS`
+    - `.querySelector()` and `.querySelectorAll()` are much more flexible
 
 ### git
 
