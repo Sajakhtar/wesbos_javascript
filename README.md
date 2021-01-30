@@ -235,7 +235,7 @@
 - The **Document** object is responsible for everything from the opening HTML to the closing HTML tag
 - The **Navigator** object is at a higher level than the window that give info about browser and device (webcam, audio access, battery level, GPD Co-ords, ...)
 - **DOM: Selecting Elements**
-  -In index.html, best to place the JS `<script>` tag right before the closing body, else the JS run before it can observe the DOM
+  - In index.html, best to place the JS `<script>` tag right before the closing body, else the JS run before it can observe the DOM
   - Ways around that issue is to create a `function init() {...}` and below the function add `document.addEventListener('DOMContentLoaded', init)`
   - Before interaction with elements on page, you first need to select the element, then you can listen for clicks, change content, add content, remove it
   - Two main ways to select elements, `document.querySelector()` which gives one elements and `document.querySelectorAll()` gives all elements in a NodeList, like an array
