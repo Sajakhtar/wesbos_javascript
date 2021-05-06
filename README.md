@@ -62,17 +62,37 @@ In command prompt/ terminal via node: `node file.js`
 
 ## Types in JS
 
-- SNOB'N'US
+- SNOB'N'US - 7 types
+- check type `typeof varName`
 - String
+  - using single quotes `'`, double quotes `"` or backticks `
+  - interpolation is when you put variables inside a string
+    - with double and single quotes you'd have to concatenate string with variables
+    - with backticks you can reference variables inside string using `${varName}`
+      - can even place a statemnet inside e.g. `${1 + 100}`
+      - backticks are good for creating strings of multiline html
 - Number
+  - there is only one type of number in JS, which covers int and float
   - In console: window.location = \`https://\${0.1+0.2}.com\`;
   - https://0.30000000000000004.com/
   - better to work with whole numbers i.e. cents rather than dollars
-- Object - everything in JS is an object, so this is a special case
+  - `Nan`, `infinity` and `-infinity` are numbers in JS
+- Object
+  - everything in JS is an object, so this is a special case
+  - objects are collections of data or functionality
+  - they are the building blocks in JS
+  - `const myObj = { firstName: "wes", lastName: 'bos'}`
+  - order doesn't matter in at object, if you need order then use an array
 - Boolean
+  - `true` or `false`
+  - for equality almost always use triple equals `===`, while double equals `==` is almost always a bad practice
+  - triple equals `===` checks for value and type equality
 - Null
+  - a value of nothing i.e. set to `null`
 - Undefined
-- Symbol - unique identifier
+  - have not yet had a value assigned
+- Symbol
+  - a way to do unique identifiers in JS
 
 ## Functions
 
@@ -89,6 +109,10 @@ Functions take in data as arguements and can return a value.
 
 Built-in functions examples
 
+- `Math.round(2.34);`
+- `Math.floor(2.34);`
+- `Math.ceil(2.34);`
+- `Math.random()` between 0 and 1
 - `Math.max(10,12)`
 - `parseFloat('20.234234')`
 - `parseInt('20.234234')`
@@ -103,12 +127,113 @@ DRY - don't repeat your self, keep your code DRY
 Custom Functions:
 
 - normal functions
+  ```js
+  function doctorize(firstName = "") {
+    return `Dr. ${firstName}`;
+  }
+  ```
 - anonymous functions - used in callbacks and IIFE
+  - A function without a name
+  - Not valid as standalone
+  - Use cases are in Callbacks, if statements
+  ```js
+  function(firstName = '') {
+    return `Dr. ${firstName}`;
+  }
+  ```
 - function expressions i.e. stored as a variable
+  - Store a anonymous function as a value in a variable
+  - This is not good practice
+  - The difference between a Function Expression and a normal function is in how they operate in HOISTING
+  - Can only be called after the variable containing the function is declared
+  ```js
+  const doctorize = function (firstName = "") {
+    return `Dr. ${firstName}`;
+  };
+  ```
 - arrow functions
+
+  - `=>` is a fat arrow, `->` is a skinny arrow
+
+  ```js
+  const inchToCM = (inches) => {
+    return inches * 2.54;
+  };
+
+  const inchToCM = (inches) => inches * 2.54;
+
+  const add = (a, b = 3) => a + b;
+  ```
+
+  - Returning an object - implicit return of object is problematic as the JS reads the curly brackets as a block of code, not an object
+  - Just put parenthesis around the object to contain it
+  - Regular function may be more readable, don't have to use arrow functions for everything
+
+  ```js
+  const makeABaby = (first, last) => ({ name: `${first} ${last}`, age: 0 });
+  ```
+
 - IIFE - Immediaely Invoked Function Expression
+
+  - Wrap anonymous function in parenthesis, then adding parenthesis at the end
+
+  ```js
+  (function () {
+    console.log("Running Anon Func as IIFE");
+    return "You are cool";
+  })();
+
+  (function (name) {
+    console.log("Running Anon Func as IIFE");
+    return `You are cool, ${name}`;
+  })("jon");
+  ```
+
+- Parameters & arguments
+
+  - it's not good for a function to reach outside to fetch variables that are in global scope
+  - it's better to create parameters for a fuction to accept data in the form or arguments
+  - parameters are the place holders for arguments
+  - arguements are the variables/ values/ expressions passed into a function call
+  - parameters can have a default value - good practice so that the function doesn't error out
+    - the only arguement you can pass into a function to make it fall back to it's default value is `undefined`
+
+  ```js
+  function myFunc(param1, param2 = 0.5) {
+    // do something
+    return; //something
+  }
+
+  let x = myFunc(5);
+  let y = myFunc(4, 0.6);
+  let z = myFunc(1 + 2);
+  let g = myFunc(x);
+  let j = myFunc(myFunc(5)); // BODMAS
+  ```
+
 - Method - a function that lives inside an object
+  - e.g. console.log()
+  - Console is the object, and log() is the function that lives inside that object
 - callback function
+
+  - Run something when there is a click or certain time has passed
+
+  ```js
+  // select a button with class clickMe from index.html
+  const button = document.querySelector(".clickMe");
+
+  function handleClick() {
+    console.log("great clicking");
+  }
+
+  // call the handleClick function when the button is clicked
+  button.addEventListener("click", handleClick);
+
+  // or using anon func
+  button.addEventListener("click", function () {
+    console.log("nice job");
+  });
+  ```
 
 Hoisting - Functions that are declared with a function keyword (i.e. normal function) are Hoisted. Meaning that JS takes all functions and hoists them up to the top of the file. So that anywhere you call the function, it will be available to you. So technically you can run a function before it is defined. JS does not hoist Function Expressions (variable functions)
 
@@ -254,6 +379,15 @@ use `const` by default, `let` if you need to reassign, and `var` only in a very 
 
 - `let` and `const` are block scoped
 - `var` is function scoped
+
+Variables should be names using camelCase.
+Variables should not be names with Proper case or UpperCamelCase, unless they are a class.
+Variables can be named using snake_case, but kebab-case is not.
+
+Variables can start with underscore `_` or dollar `$`.
+
+- `$` is synonymous with jQuery library
+- `_` is synonymous with lodash library
 
 Lexical scoping or static scoping - the way the scope lookup of a variable happens is based on where the functions are defined, not where the functions are run.
 

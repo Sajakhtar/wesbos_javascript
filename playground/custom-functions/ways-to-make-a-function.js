@@ -128,7 +128,7 @@ e.g. console.log()
 Console is the object, and log() is the function that lives inside that object
  */
 
-// no need to name function asas browser infers the function name from the property name
+// no need to name function as browser infers the function name from the property name
 // const wes = {
 //   name: 'wes snow',
 //   sayHi: function() {
