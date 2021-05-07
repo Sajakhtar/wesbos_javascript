@@ -8,10 +8,21 @@
     
 </head>
 <body>
+    <p class="wes">I am wes, I <em>love</em> to bbq and <strong>make websites</strong></p>
+    <img class="nice cool" src="https://source.unsplash.com/random/200x200" />
+
     <div class="items">
         <p>Hi I'm an item</p>
         <div class="item">
-            <h2>Sub Div</h2>
+            <img class="custom" data-name="Wes" data-last="Bos" src="https://source.unsplash.com/random/300x300" />
+            <img data-name="bos" src="https://source.unsplash.com/random/300x300" />
+            <img data-name="jon" src="https://source.unsplash.com/random/300x300" />
+            <img data-name="snow" src="https://source.unsplash.com/random/300x300" />
+            <h2>
+                Sub Div Heading
+                <span>i am hidden</span>
+
+            </h2>
             <p>Hi I'm an item</p>
             <img src="https://source.unsplash.com/random/300x300" />
             <p>Hi I'm an item</p>
@@ -27,9 +38,30 @@
         
         <article class="item">
             <h2 id="wes">I'm an article</h2>
+            <p class="pizza">This is how many pizzas I ate 🍕</p>
             <img src="https://source.unsplash.com/random/300x300" />
         </article>
     </div>
-    <script src="./dom.js"></script>
+
+    <style>
+        h2 span {
+            display: none;
+        }
+
+        img {
+            transition: all 0.2s;
+        }
+
+        .round {
+            border-radius: 50%;
+            /* transform: rotate(360deg); */
+            transform: rotate(1turn) scale(2);
+            box-shadow: 0 0 10px black;
+        }
+    </style>
+    <!-- /* <script src="./dom.js"></script> */ -->
+    <!-- <script src="./creating.js"></script> -->
+    <!-- <script src="./creating-with-strings.js"></script> -->
+    <script src="./traversing.js"></script>
 </body>
 </html>

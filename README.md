@@ -573,3 +573,222 @@ Before `.querySelector()` and `.querySelectorAll()` were introduced, you'd have 
 - `.querySelector()` and `.querySelectorAll()` are much more flexible
 
 ### DOM: Element Properties and Methods
+
+When selecting an element using `.querySelector()` and `.querySelectorAll()`. what's returned is an object with properties and methods.
+
+`console.dir(element);` will show the list of properties available.
+
+We can get values of the properties or we can set the values of the properties.
+
+`element.textContent` is newer than `element.innerText`, `textContent` returns every element in the node, including hidden elements/ tags, while `innerText` is aware of CSS styling.
+
+We have properties for `innerHTML` and `outerHTML` which we can get and set.
+
+THere are methods for inserting stuff into the HTML
+
+- `insertAdjacentElement()`
+- `insertAdjacentHTML()`
+- `insertAdjacentText('beforeend', 'some text')` - there is also `afterbegin`, `beforebegin` and more
+
+This is the best way to add text or elements to a HTML element.
+
+A node can be anything e.g. a HTML tag or just a string, but an element is only a HTML tag.
+
+Some properties e.g. `textContent` exist on nodes, while some only exist on elements.
+
+The Mozilla Web Docs have a list of properties at a [node](https://developer.mozilla.org/en-US/docs/Web/API/Node) level and [element](https://developer.mozilla.org/en-US/docs/Web/API/Element) level.
+
+### DOM: Working with Classes
+
+A commone thing to do with JS is the adding and removing of classes of elements.
+
+`element.classList` returns a DOMTokenList, which is a list of all classes on that element.
+
+THe prototype `__prot__` in the console lists the methods we can apply.
+
+`element.className` returns the classes as a string, without no methods to use on it, so `element.classList`is more useful.
+
+For `classList` we have popular methods:
+
+- `classList.add()`
+- `classList.remove()`
+- `classList.toggle()` add the class if it's not there and removes it if it is already there
+- `classList.contains('someClass')` returns a boolean, useful to check if a class is in place or not
+
+Alot of JS interaction with adding/ removing/ toggling CSS to elements, that will allow us to do transitions - typical for modals and navigations that need to slide.
+
+### DOM: Built-in and Custom Data Attributes
+
+Attributes are anything that's provided to an element as additional information
+
+- classes
+- id
+- src
+- alt
+
+Gett, set and check attributed using the following methods
+
+- `element.getAttribute('alt')`
+- `pic.setAttribute('alt', 'a scenic view')`
+- `element.hasAttribute('alt')`
+
+You can also set non-standard attributes, but you shouldn't go making your own attributed willy nilly, in case the HTML standard wants to create that attribute as a standard one in the future, then you're left with legacy code that will clash.
+
+For custom attributes, it's best to use data attributes i.e. `data-something="something"`.
+
+Data attributes allow you to attach meta data to elements.
+
+You can access data attributes using the `element.dataset` property. This gives an objects of all the data attributes assigned to that element, and the associated properties available.
+
+You can add an event listener to an element, to listen for a click for instance, then do something with the data attributes.
+
+For example, when a thumbnail `img` element is clicked you could open up a larger version, where the larger version file path is in a data attribute.
+
+### DOM: Creating HTML
+
+The main way to create HTML is using the `document.createElement(tagName [, optionalOptions])` method.
+
+Example:
+
+```js
+const myImage = document.createElement("img");
+
+myImage.src = "https://source.unsplash.com/random/300x300";
+myImage.alt = "nice photo";
+```
+
+HTML can then be added to the DOM using `.appendChild()` method, where the HTML is appended to node to be specified.
+
+Append to the body once, so that we only cause a reflow/repaint of the page once.
+
+You can append elements adjacent to another element using `insertAdjacentElement('afterbegin', heading);` method.
+
+Other useful methods of creating and appending elements
+
+```js
+const myList = document.createElement("ul");
+const myListItem = document.createElement("li");
+myListItem.textContent = "one";
+myList.appendChild(myListItem);
+
+const myListIitems = ["one", "two", "three", "four", "five"];
+
+for (i in myListIitems) {
+  const myListItem = document.createElement("li");
+  myListItem.textContent = myListIitems[i];
+  myList.appendChild(myListItem);
+}
+
+// document.body.appendChild(myList);
+document.body.insertAdjacentElement("afterbegin", myList);
+
+const li6 = document.createElement("li");
+li6.textContent = "six";
+myList.append(li6);
+
+const li7 = li6.cloneNode();
+li7.textContent = "seven";
+// myList.insertAdjacentElement('beforeend', li7);
+li6.insertAdjacentElement("afterend", li7);
+```
+
+### DOM: HTML from Strings and XSS
+
+This method is preferable, though there is a security caveat related to cross site scripting (XSS).
+
+The `innterHTML` property provide the html inside an elemt as a string, but it can also be used as a setter and set it equal to a string with backticks.
+
+The benefit of using backticks, is that we can use multiple lines and interpolate values easily.
+
+```js
+const item = document.querySelector(".item");
+
+console.log(item.innerHTML);
+
+const src = "https://source.unsplash.com/random/300x300";
+
+const myHTML = `
+    <div class='wrapper'>
+        <h2>This is a H2 Tag</h2>
+        <img src=${src} alt=""/>
+    </div> 
+    div
+`;
+
+item.innerHTML = myHTML;
+```
+
+This is how templating works in any framework (reach, vue, svelte) - you set your inner html template with variable placeholders.
+
+The string only becomes an element when we place it in the DOM by setting the `innerHTML`. Only then can you access the properties and attributes of the the elements e.g. classList
+
+The way around this is to use the `createRange()`method.
+
+A range is a collection of elements of a part of HTML that we can work with.
+
+`document.createRange().createContextualFragment(myHTML)` converts a string into true elements that we can work with, before the elements have been actually added to the DOM. This means we can use methods such as `appendChild()`.
+
+```js
+const myFragment = document.createRange().createContextualFragment(myHTML);
+console.log(myFragment);
+
+console.log(myFragment.querySelector("img"));
+
+document.body.appendChild(myFragment);
+```
+
+Security and sanitization
+
+Cross Site Scripting (XSS) is where people inject scripts tags where the browser will run that script tag, where someone can do anything they want like drain a bank account.
+
+For example, if a bank site had a user input of `What's your name: ___`, than a hacker could enter a script tag `<script>...</script>` with malicious code to drain the back account.
+
+Anytime you allow a third party to run JS on your page, that is a huge security risk.
+
+You can scrub your HTML of any security vunerabilities before dumping it in the DOM.
+
+### DOM: Traversing and Removing Nodes
+
+We often have to select elements based on their position and so we need to traverse the DOM to select the right elements.
+
+There are lots of different properties that revolve around node and element that allow us to traverse.
+
+Everything in HTML is a node, and if it's wrapped in a tag then it is an element.
+
+Properties of elements include:
+
+- `.children`
+- `.firstElementChild`
+- `.lastElementChild`
+- `.previousElementSibling`
+- `.nextElementSibling`
+- `.parentElement`
+
+These can be daisy chained to traverse the DOM.
+
+Try this in the console after inspecting an elelemtn: `$0.parentElement.parentElement.nextElementSibling.children[1]`.
+
+This approach would not be practical to select elements, as the traverse will be ruined if another element is added in to the DOM, so you'r have to update the traverse path.
+
+Best to use `querySelector` to select elements.
+
+In most cases you would want to select elemetns, but we can select nodes as well.
+
+Properties of nodes include:
+
+- `.childNodes`
+- `.firstChild`
+- `.lastchild`
+- `.previousSibling`
+- `.nextSibling`
+- `.parentNode`
+
+There is a `.remove()`method in every single element in every single node that allows us to remove something from the DOM. We still have access to the removed element in memory, in case we want to add it back in.
+
+### DOM: Cardio
+
+See `/exercises/002-dom/DOM-cardio.js`.
+
+## Events
+
+### Events: Event Listener
