@@ -126,13 +126,18 @@ DRY - don't repeat your self, keep your code DRY
 
 Custom Functions:
 
-- normal functions
+JS functions are first class citizens - they are values in themselves, they can be stored in variables and passed into other functions.
+
+JS Functions can be moved around like any other piece of data, that's not true for other languages.
+
+- **normal functions**
   ```js
   function doctorize(firstName = "") {
     return `Dr. ${firstName}`;
   }
   ```
-- anonymous functions - used in callbacks and IIFE
+- **anonymous functions**
+  - used in callbacks and IIFE
   - A function without a name
   - Not valid as standalone
   - Use cases are in Callbacks, if statements
@@ -141,25 +146,30 @@ Custom Functions:
     return `Dr. ${firstName}`;
   }
   ```
-- function expressions i.e. stored as a variable
+- **function expressions**
+  - i.e. stored as a variable
   - Store a anonymous function as a value in a variable
   - This is not good practice
   - The difference between a Function Expression and a normal function is in how they operate in HOISTING
-  - Can only be called after the variable containing the function is declared
+  - function expressions Can only be called after the variable containing the function is declared, whereas normal functions can be called before they're declared due to being hoisted up to the top of the code
   ```js
   const doctorize = function (firstName = "") {
     return `Dr. ${firstName}`;
   };
   ```
-- arrow functions
+- **arrow functions**
 
   - `=>` is a fat arrow, `->` is a skinny arrow
+  - arrow functions use a fat arrow
+  - they're stored in a variable, so they're not hoisted
 
   ```js
   const inchToCM = (inches) => {
     return inches * 2.54;
   };
 
+  // with implicit return
+  // you can remove the parenthesis for a single parameter
   const inchToCM = (inches) => inches * 2.54;
 
   const add = (a, b = 3) => a + b;
@@ -170,12 +180,13 @@ Custom Functions:
   - Regular function may be more readable, don't have to use arrow functions for everything
 
   ```js
-  const makeABaby = (first, last) => ({ name: `${first} ${last}`, age: 0 });
+  const makeAPerson = (first, last) => ({ name: `${first} ${last}`, age: 0 });
   ```
 
 - IIFE - Immediaely Invoked Function Expression
 
-  - Wrap anonymous function in parenthesis, then adding parenthesis at the end
+  - Wrap anonymous function in parenthesis, then adding parenthesis at the end to execute it
+  - IIFE used to be popular before we had block scope and modules, since IIFE is in parenthesis, it's not prone to variables leaking into or out of it - it's self-contained
 
   ```js
   (function () {
@@ -189,7 +200,7 @@ Custom Functions:
   })("jon");
   ```
 
-- Parameters & arguments
+- **Parameters & arguments**
 
   - it's not good for a function to reach outside to fetch variables that are in global scope
   - it's better to create parameters for a fuction to accept data in the form or arguments
@@ -211,10 +222,45 @@ Custom Functions:
   let j = myFunc(myFunc(5)); // BODMAS
   ```
 
-- Method - a function that lives inside an object
+- **Methods**
+
+  - a function that lives inside an object
   - e.g. console.log()
   - Console is the object, and log() is the function that lives inside that object
-- callback function
+
+  ```js
+  // no need to name function as browser infers the function name from the property name
+  const wes = {
+    name: "wes snow",
+    sayHi: function () {
+      console.log(this);
+      console.log("Hey wes");
+      return "hello wes";
+    },
+  };
+
+  // short hand method - most common
+  const jon = {
+    name: "jon snow",
+    sayHi() {
+      console.log(this);
+      console.log("Hey Jon");
+      return "hello Jon";
+    },
+  };
+
+  console.log(jon.sayHi());
+
+  // arrow func method - only use if you don't want to access 'this' keyword
+  const jane = {
+    name: "jane doe",
+    sayHi: () => "Hey Jane",
+  };
+
+  console.log(jane.sayHi());
+  ```
+
+- **callback function**
 
   - Run something when there is a click or certain time has passed
 
@@ -233,6 +279,19 @@ Custom Functions:
   button.addEventListener("click", function () {
     console.log("nice job");
   });
+
+  // timer callback - args are function to run and after how many milliseconds
+  setTimeout(jon.sayHi, 3000);
+
+  // using anon func
+  setTimeout(function () {
+    console.log("time to eat");
+  }, 3000);
+
+  // using arrow func
+  setTimeout(() => {
+    console.log("time to sleep");
+  }, 4000);
   ```
 
 Hoisting - Functions that are declared with a function keyword (i.e. normal function) are Hoisted. Meaning that JS takes all functions and hoists them up to the top of the file. So that anywhere you call the function, it will be available to you. So technically you can run a function before it is defined. JS does not hoist Function Expressions (variable functions)
@@ -243,7 +302,11 @@ Hoisting - Functions that are declared with a function keyword (i.e. normal func
 
 ### Console Methods
 
-console.log(), console.error(), console.warn().
+console.log()
+
+console.error(), gives a stack trace
+
+console.warn()
 
 console.table(), good for a list of objects.
 
@@ -251,12 +314,46 @@ console.count(), shows how many times something has run.
 
 console.group() or console.groupCollapsed() with console.groupEnd(), useful for grouping all logs between into a collapsable group.
 
+```js
+const people = [
+  { name: "Wes", cool: true, country: "Canada" },
+  { name: "Scott", cool: true, country: "Merica" },
+  { name: "Snickers", cool: false, country: "Dog Country" },
+];
+
+people.forEach((person, index) => {
+  console.groupCollapsed(`Los for ${person.name}`);
+  console.log(person.country);
+  console.log(person.cool);
+  console.log("DONE!");
+  console.groupEnd(`Los for ${person.name}`);
+
+  console.log(person.name);
+
+  if (person.name === "Wes") {
+    console.error("wrong name");
+    console.warn("check name");
+    console.table(people); // good for a list of objects
+  }
+});
+
+function doALotOfStuff() {
+  console.group("Doing some stuff");
+  console.log("log");
+  console.error("error");
+  console.warn("warning");
+  console.groupEnd("Doing some stuff");
+}
+```
+
 ### Callstack or stack trace
 
 Tells you what function called what function.
 
 This will be important when going from one file to another.
-e.g. `go()` calls `doctorize()` and `greet()`, which calls `doesntExist()`
+e.g. Reference `playground/001-debugging/debugging.js`
+
+- `go()` calls `doctorize()` and `greet()`, which calls `doesntExist()`
 
 - doesntExist() will cause an error in console
 - read the callstack in the console to see where the error was
@@ -277,20 +374,20 @@ e.g. go to https://developer.mozilla.org/en-US/
 
 Inspect the search bar in Elements tab.
 
-Switch over to Console and enter \$0, this will return the element currently selected in Elements tab.
+Switch over to Console and enter `$0`, this will return the element currently selected in Elements tab.
 
 A shorthand to access the last element clicked, this is not jQuery
 
-- you can check \$0.value
-- $0 is last element clicked, $1 is second last element clicked, and so on
-- $ and $\$ are shorthand selectors for elements
+- you can check `$0.value`
+- `$0` is last element clicked, `$1` is second last element clicked, and so on
+- `$` and `$$` are shorthand selectors for elements
 - e.g. `$('p')` matches the first `<p>` element
-- and `$$('p')` matches all `<p>` elements, returns array of all <p> elements
+- and `$$('p')` matches all `<p>` elements, returns array of all `<p>` elements
 - This shorthand won't work if there is jQuery on the site
 
 ### Breakpoints
 
-`debugger;` keyword will pause JS from running only when console is open.
+`debugger;` keyword in your script.js file will pause JS from running only when console is open.
 
 This adds a breakpoint.
 
@@ -300,11 +397,11 @@ And you can step over each line of code from there on;
 
 Or click play to continue running code until you hit the next debugger;
 
-This is good if console loggging is overwhelming;
+This is good if console loggging is overwhelming, as `debugger;` allows us to slow things down and step through the code, see the variables and scope at each step.
 
-Be sure to remove 'debugger;' from your code, though it only impacts the site if dev tools are open;
+Be sure to remove `debugger;` from your code, though it only impacts the site if dev tools are open;
 
-Also, in the Sources tab, navigate to the .js file and click on any line to add a breakpoint.
+Also, in the Dev Tools Sources tab, navigate to the .js file and click on any line to add a breakpoint.
 
 ### Scope
 
@@ -328,7 +425,7 @@ Filter by XHR (data being sent out), JS, CSS, Img, Media
 
 Another way to add breaks.
 
-Inspect element > in elements tab, right click element > break on > attribute modification (e.g. change font size).
+Inspect element > in elements tab, right click element > break on > attribute modification (e.g. when something changes the font size).
 
 (also subtree modification, e.g when something adds a div or something).
 
@@ -350,16 +447,16 @@ Scope answers the question 'where are my variables and functions available to me
 
 - anytime you declare a variable that will be available anywhere else you're running JS in your app (console, html file, JS file)
 - Everything that is attached to global scope is inside the `window` object
-  - functions and `var` variables are attached to `window` while `let` and `const` variables are not
-  - you shouldn't be makint global variables, a recipe for a headache
+  - functions and `var` variables are attached to `window` while `let` and `const` variables are not, thought they can be still globally scoped
+  - you shouldn't be making global variables, a recipe for a headache
 
 ### Function scope
 
 - when variables are created inside a function, those variables are onnly available within that function
 - you can explicitly return a value from the function and put it in it's own variable
 - consider curley brackets `{ ... }` as fences, that don't leak out variables
-- however, functions can access variables scope a level or more higher
-- you can name variables the same if they're not in the same scope, however, it's not a good idea to do so as you can no long access a varible of the same name that is scoped higher up, since it's been shadowed (overwritten) locally
+- however, functions can access variables scope a level or more higher - called scope lookup
+- you can name variables the same if they're not in the same scope, however, it's not a good idea to do so as you can no longer access a varible of the same name that is scoped higher up, since it's been shadowed (overwritten) locally within the function
 
 ### Block scope
 
@@ -367,15 +464,15 @@ Scope answers the question 'where are my variables and functions available to me
 - `let` and `const` variables are not accessible outside the block
 - `var` variables are accessible outside the block i.e. they leak outside and can cause bugs, so better to use `let` and `const`
 - better to declare the variable outside of the block and update it within the block
-- `var` variables are however function scoped
+- `var` variables are however function scoped, i.e. they don't leak out of the function, instead they must be returned
 
 ### Variable best practices
 
-Try not to create global variables (anyway, it's practically impossible when working with JS modules unless you explicitly attach it to window).
+Try not to create global variables (anyway, it's practically impossible when working with JS modules unless you explicitly attach it to `window`).
 
 Global variables lead to bugs down the road where you accidentally overlap variables.
 
-use `const` by default, `let` if you need to reassign, and `var` only in a very specific use case
+use `const` by default, `let` if you need to reassign it, and `var` only in a very specific use case
 
 - `let` and `const` are block scoped
 - `var` is function scoped
@@ -391,22 +488,24 @@ Variables can start with underscore `_` or dollar `$`.
 
 Lexical scoping or static scoping - the way the scope lookup of a variable happens is based on where the functions are defined, not where the functions are run.
 
-Nested functions are scoped the exact same as variables.
+Nested functions are scoped the exact same as variables i.e. the nested function is scoped to the parent function.
 
 ## Hoisting
 
 Hoisting allows you to access functions and variables befor they have been created.
 2 things in JS that are hoisted (1) function declarations and (2) variable declarations.
 
-Function hoisting
+### Function hoisting
 
 - Javascript compiler takes all of the function declarations and hoists them to to the top of the file so they're all available to use below, so you can technically run a function before it's been declared
 - only works for regular functions, not function expressions or arrow functions
 - Good practice to define all the functions first, or place in a separate module
+- shouldnt rely on hoisting
 
-Variable hoisting
+### Variable hoisting
 
 - Javascript hoists the variable declarations but not the values set
+- i.e. before JS runs it brings the variable names to the top, but not the values, so the variables exist but as undefined
 
 ## Closures
 
@@ -416,12 +515,12 @@ Closures is the ability to access parent level scope from a child level scope, e
 
 A closure is where you call the inner function at a later point in time, rether than in the parent function.
 
-Use case: functions inside functions
+### Use case: functions inside functions
 
 - Javascript is able to create a function inside of functions and it can still reach out to the parent scope and even though the outer function is done running, it'll still maintain the parent variables in memory so that we can access them later
-- when the inner scope references a variable that was created in the outer scope, this is referred to as a closure i.e we're still able to access variables from the outer scope, even after the outer scope function has been 'closed over'
+- when the inner scope references a variable that was created in the outer scope, this is referred to as a closure i.e we're still able to access variables from the outer scope, even after the outer scope function has been 'closed over' i.e. it's not garbage collected
 
-Use case: to create private variables
+### Use case: to create private variables
 
 - so the you can maintain a version of that variable for each instance of the outer function
 - Example
@@ -445,7 +544,7 @@ The Elements panel is not just the HTML, it the DOM, with which we can interface
 - fetch new data, play music or video
 - can add any type of interaction to the page
 
-Core concepts of the DOM, such as events, elements and classes, transend the frameworks (React, Vue, Angular) even if the frameworks help take care of these concepts.
+Core concepts of the DOM, such as events, elements and classes, transend the frameworks (React, Vue, Angular) even if the frameworks help take care of these concepts - It's still worth learning about the DOM
 
 Global Scope of the browser is called the **Window** object where all of the global variables are stored and helpful properties e.g. in the console:
 
@@ -459,12 +558,12 @@ The **Navigator** object is at a higher level than the window that give info abo
 
 ### DOM: Selecting Elements
 
-In index.html, best to place the JS `<script>` tag right before the closing body, else the JS run before it can observe the DOM.
+In index.html, best to place the JS `<script>` tag right before the closing body, else the JS is downloaded and run before it can observe the DOM. There are ways to get around that using `async` and `defer`. Placing the `<script>` tag right before the closing body ensures that the html is download before the JS, so that the JS has access to the DOM.
 
 Ways around that issue is to create a `function init() {...}` and below the function add `document.addEventListener('DOMContentLoaded', init)`.
 
 Before interaction with elements on page, you first need to select the element, then you can listen for clicks, change content, add content, remove it.
-Two main ways to select elements, `document.querySelector()` which gives one elements and `document.querySelectorAll()` gives all elements in a NodeList, like an array withouth .map(), .reduce() built - good interview questions.
+Two main ways to select elements, `document.querySelector()` which gives one elements and `document.querySelectorAll()` gives all elements in a NodeList, like an array without the built-in method like `.map()`, `.filter()`, `.reduce()` - good interview questions.
 
 - you can run `querySelector()` on any other element selected already selected to select it's children i.e. `mySelectedElement.querySelector('.item')`
 
@@ -474,7 +573,3 @@ Before `.querySelector()` and `.querySelectorAll()` were introduced, you'd have 
 - `.querySelector()` and `.querySelectorAll()` are much more flexible
 
 ### DOM: Element Properties and Methods
-
-## git
-
-### github
