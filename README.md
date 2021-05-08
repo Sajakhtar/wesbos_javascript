@@ -3,17 +3,19 @@
 ## Contents
 
 1. [Chrome Dev Tools](#chrome-dev-tools)
-2. [Terminal](#windows-command-prompt-vs.-linux-terminal)
-3. [Relative file paths](#relative-file-paths)
-4. [Running and loading JS](#running-and-loading-js)
-5. [Tooling](#tooling)
-6. [Types in JS](#types-in-js)
-7. [Functions](#functions)
-8. [Debugging](#debugging)
-9. [Scope](#scope)
-10. [Hoisting](#hoisting)
-11. [Closures](#closures)
-12. [Document Object Model (DOM)](#document-object-model)
+1. [Terminal](#windows-command-prompt-vs.-linux-terminal)
+1. [Relative file paths](#relative-file-paths)
+1. [Running and loading JS](#running-and-loading-js)
+1. [Tooling](#tooling)
+1. [Types in JS](#types-in-js)
+1. [Functions](#functions)
+1. [Debugging](#debugging)
+1. [Scope](#scope)
+1. [Hoisting](#hoisting)
+1. [Closures](#closures)
+1. [Document Object Model (DOM)](#document-object-model)
+1. [Events](#events)
+1. [Serious Practice Exercises](#serious-practice-exercises)
 
 ## Chrome Dev Tools
 
@@ -792,3 +794,314 @@ See `/exercises/002-dom/DOM-cardio.js`.
 ## Events
 
 ### Events: Event Listener
+
+DOM elements emit events, when they're clicked/ hovered / dragged or generally interacted with.
+
+We can use event listeners to listen for when these events happen and do something.
+
+We can attach event listeners to all elements as well as the document and window.
+
+In order to listen for events, you first need to select the element then add the event listener method `element.addEventListener('click', myFunc)`.
+
+`addEventListener` takes 2 arguments usually.
+
+1. what type of event do you want to listen to e.g. click, hover
+2. callback function - this is just a regular function
+
+- can use an anonymous function within `addEventListener`
+- but named function can be used in more than one event listner, so it more flexible and more inline with DRY
+
+Unbind an event listener by using `element.removeEventListener('click', myFunc)`. To remove an event listener you must have reference to the original function, and this is easier with a named function rather than anonymous function. Even if you place the same anonymous function inside `removeEventListener` the removal/ unbinding still won't work, as it's not the same anon func declared in `addEventListener`, rather it's a new declaration of that anon function.You must use a named function or an arrow function stored in a variable.
+
+Creating custom events is handy in case you want to emit a buy event or a success event.
+
+Listening for events on multuple items is a common scenario .e.g. multiples of the same type button or image. Here we can use `querySelectorAll()` to select all the items we want to attach the event listener to.`querySelectorAll()` returns a node list. Apply the `forEach()` method with an arrow function to apply the event listener to each node within the node list. `forEach()` can take in an anon function or anon arrow function or a name functioned defined elsewere.
+
+```js
+// console.log('it works');
+
+const butts = document.querySelector(".butts");
+
+console.log(butts);
+
+// event listener with anonymous callback function
+butts.addEventListener("click", function () {
+  // do something
+  console.log("butts was clicked");
+});
+
+const cool = document.querySelector(".cool");
+
+function handleClick() {
+  console.log("cool was clicked");
+}
+
+// event listener with named callback function
+cool.addEventListener("click", handleClick);
+
+// remove event listner for named and arrow callbacks only
+cool.removeEventListener("click", handleClick);
+
+const dont = document.querySelector(".dont");
+
+const clicked = () => console.log("WHY???");
+
+dont.addEventListener("click", clicked);
+
+// listen on multiple items
+
+const buyButtons = document.querySelectorAll(".buy");
+
+function buyItem() {
+  console.log(`buying item`);
+}
+
+// using anon arrow function
+// buyButtons.forEach((buy) => buy.addEventListener('click', buyItem));
+
+function handleBuyClick(buyButton) {
+  buyButton.addEventListener("click", buyItem);
+}
+
+// using named function
+buyButtons.forEach(handleBuyClick);
+```
+
+### Events: Event Objects - targets, bubbling, propagation and capture
+
+The event object contains useful information about the element that's been interacted with, i.e. what happened in the event, and methods for working with the event.
+
+To access the event object, we pass in the event param into the event listner callback function.
+
+```js
+const buyButtons = document.querySelectorAll(".buy");
+
+function buyItem(event) {
+  console.log(`you're buying item`);
+  console.log(event);
+  console.log(event.target);
+  console.log(event.target.dataset);
+  console.log(event.target.dataset.price);
+  console.log(typeof event.target.dataset.price);
+  console.log(parseFloat(event.target.dataset.price));
+
+  button = event.target;
+  console.log(button.textContent);
+}
+
+buyButtons.forEach((buy) => buy.addEventListener("click", buyItem));
+```
+
+The event object has methods such as
+
+- `isTrusted` - would be false if you fake a click
+- `pressure` - useful for touchscreen devices, smartphones and tablets
+- `target` - shows the element being interacted with
+  - this is useful if we add `data-` attributes to the elemtents which can be access to through `target.dataset`
+- `currnetTarget` - this is the same as `target`, but the difference comes when you have elements nested inside of the element you're listening to then
+  - `event.target` is the thing that actually got clicked which could be a nested element within the element being listened to
+  - `event.currentTarget`is the element that fired the event listener
+  - So in most cases, you'd want to reach for `event.currentTarget` instead of `event.target`
+  - this is what is referred to as propogation, where the event bubble up to where the listner is e.g. placing an event listner on the window to listen for clicks - if you click anywhere in the window, say on a h2 tag, that means you've also click on the window since the h2 live in the body which live in the window, so the callback function will execute
+  ```js
+  window.addEventListener("click", function (event) {
+    console.log("you clicked the window");
+    console.log(event.currentTarget);
+    console.log(event.target);
+  });
+  ```
+  - we can stop the event from propogating up by using `event.stopPropagation()` in the callback function.
+
+captue is the opposite of propagation - when you click a button you're actually clicking the window -> document -> html -> body -> ... -> button. The capture phase is the cascading through DOM nodes from top to bottom until you reach the element that you clicked. The bubbling phase is the the propagation back up the node tree to where the listener event was.
+
+[w2.org](https://www.w3.org/TR/2009/WD-DOM-Level-3-Events-20090908/) has a good diagram of the capture and bubbling phases.
+
+When listening for clicks or any event, we can listen during the capture phase too - we can listen for a click on the window and stop it going any further. This what the the 3rd arguement to `addEventListener`is for - here we pass an `options` object specifying `capture`, `once`, `passive` criteria
+
+- setting `capture:true` means that the order in which the `console.log` fire goes top down (capture) rather than the bottom up (bubblup)
+- we can use `event.stopPropagation();` to stop the event propagating down i.e. stopping at the `window` in the example below, such that the `buyItem()` callback will never actually be run
+
+```js
+const buyButtons = document.querySelectorAll(".buy");
+
+function buyItem(event) {
+  console.log(`you're buying item`);
+}
+
+buyButtons.forEach((buy) => buy.addEventListener("click", buyItem));
+
+window.addEventListener(
+  "click",
+  function (event) {
+    console.log("you clicked the window");
+    // event.stopPropagation();
+  },
+  console.log(event.target);
+  { capture: true }
+);
+```
+
+`capture` is not a common thing to use - probably more of an interview question about how events work.
+
+Comomonly you'd listen for events on lower level elements and stop propagation to elements higher up that are also listening for events e.g. clicks, to then not also trigger their own callback.
+
+It's commone to call the `event` param `e`.
+
+```js
+window.addEventListener(
+  "click",
+  function (e) {
+    console.log("you clicked the window");
+    console.log(e.currentTarget);
+    console.log(e.target);
+    console.log(e.type);
+    console.log(e.bubbles); // bool true if it's allowed to bubble up
+    // e.stopPropagation();
+  },
+  { capture: true }
+);
+```
+
+`this` as a special word in JavaScript. In a callback function, if you want to reference the element that the event was called against, `this` keyword would surface that for us.
+
+`this` keyword is always going to be equal to whatever is to the left of the .method in the example below that would be `photoEl`
+
+```js
+const photoEl = document.querySelector(".photo");
+
+photoEl.addEventListener("mouseenter", function (e) {
+  console.log(e.currentTarget);
+  console.count(e.currentTarget);
+  console.log(this);
+});
+```
+
+`this` won't work in an arrow function. Sometimes we have nested functions that we don't want to change what th `this` keyword is scoped to, so we can get around that using arrow functions.
+
+For this reason, it's not recommmended to use `this` in event listener callback functions, instead use `e.currentTarget` or `e.target` instead.
+
+### Events: Prevent Default and Form Events
+
+There are some html elements that have default functionality when clicked or used.We can prevent the default action by using the `e.preventDefault()` method.
+
+```js
+const wes = document.querySelector(".wes");
+
+wes.addEventListener("click", function (e) {
+  console.log(e);
+
+  const shoudChangePage = confirm(
+    "This website might be malicious, do you wish to proceed"
+  );
+
+  console.log(shoudChangePage);
+
+  if (!shoudChangePage) {
+    e.preventDefault();
+  }
+});
+```
+
+Another common element with a default is form submission.
+
+The best way to grab a form is to give it a `name`, rather than a `class`.
+
+We may want to do some extended validation before the for is submitted.
+
+```js
+signupForm.addEventListener("submit", function (e) {
+  // console.log(e);
+  // e.preventDefault();
+  console.dir(e.currentTarget);
+
+  // we can do the following dot notation since the htmls form elements all have a name attribute
+  // this save you from using e.currentTarget.querySelector('[name="email"]'
+  console.log(e.currentTarget.name.value);
+  console.log(e.currentTarget.email.value);
+  console.log(e.currentTarget.agree.checked);
+
+  const name = e.currentTarget.name.value;
+
+  if (name.includes("Chad")) {
+    alert("sorry bro");
+    e.preventDefault();
+  }
+});
+```
+
+Other types of events with for inputs
+
+- `focus`whe an form field is clicked into
+- `keydown`when a key is pressed
+- `keyup` when a key is released
+- `blur`when a form field is exited, either by clicking out or tabbing
+
+These are the most common events we'll use.
+
+`keydown` would be good for validating if certain characters no acceptable for a form field.
+
+```js
+function logEvent(e) {
+  console.log(e.type);
+  console.log(e.currentTarget.value);
+}
+signupForm.name.addEventListener("keyup", logEvent);
+signupForm.name.addEventListener("keydown", logEvent);
+signupForm.name.addEventListener("focus", logEvent);
+signupForm.name.addEventListener("blur", logEvent);
+```
+
+### Events: Accessibility Gotchas and Keyboard Codes
+
+Accessibility is about keeping websites accesible to anyone that might want to use it no matter what disability they have or input device they have.
+
+HTML by itself, when marked up correctly is very accessible, but JavaScript can goof it up.
+
+**Pitfalls:**
+
+Difference between buttons and links
+
+- buttons are to be used for actions that happen inside of an applicaiton
+- links are used to change the page, a link that does not go anywhere is not a link
+- do not mix those up
+
+Valid use case for preventing default of a link click is if the user is required to be logged-in, in which case you prevent the default and and present the login popup/ screen.
+
+Things that are not keyboard accessible should not have clicks registered on them unless you need to.
+
+For example photos cannot be clicked by tabbing through the keyboard, a mouse is required, while form fields can be tabbed through via keyboard.
+
+Yet there is a valid reason for a photo to be clicks, e.g a thumbnail that expands into a bigger picture.
+
+The solution is to give the picture a `role="button"` and `tabindex="0"`attributes in the html, so people can tab to it.
+
+For some reason some people use a `<div>` as a button, you must add `role="button"`and `tabindex="0"` to it.
+
+It's better just to use `<button>` and place an `<img/>` inside, so that you get the default accessibility behaviour without having to add more attributes.
+
+`e.key` will give us the key that triggered the event e.g. tab, enter, ...
+
+[keycode.info](http://keycode.info/) has all the meta data about keyboard keys.
+
+```js
+const photo = document.querySelector(".photo");
+
+function handlePhotoClick(e) {
+  if (e.type === "click" || e.key === "Enter") {
+    console.log("photo clicked");
+  }
+}
+
+photo.addEventListener("click", handlePhotoClick);
+photo.addEventListener("keyup", handlePhotoClick); // listen for Enter keyup
+```
+
+## Serious Practice Exercises
+
+### Etch-A-Sketch
+
+### Click Outside Modal
+
+### Scroll Events and Intersection Observer
+
+### Tabs
