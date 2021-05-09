@@ -16,6 +16,7 @@
 1. [Document Object Model (DOM)](#document-object-model)
 1. [Events](#events)
 1. [Serious Practice Exercises](#serious-practice-exercises)
+1. [Logic and Flow Control](#logic-and-flow-control)
 
 ## Chrome Dev Tools
 
@@ -1100,8 +1101,141 @@ photo.addEventListener("keyup", handlePhotoClick); // listen for Enter keyup
 
 ### Etch-A-Sketch
 
+[see live ]()
+
+Etch-A-Sketch game that allows you to draw on a white board on screen using mouse movements, and shake button to reset the board.
+
+Also includes canvas in HTML and JS; and JS switch statements.
+
+We grab the canvas, then grab the context, either 2D or 3D. In this case we work with 2D. Then we have a set of method for drawing on the canvas like with Microsoft Paint. The canvas is the element and the context is where the drawing occurs.
+
+HSL values are a way to change the color in the browsher - see [mothereffinghsl](https://mothereffinghsl.com/). To change color whent he curser moves, just increment the h-value by one.
+
+See `exercises/004-etch-a-sketch/`
+
 ### Click Outside Modal
+
+[see live ]()
+
+This example shows how to close a modal popup once a user presses the escape key or clicks outside of the popup.
+
+Checking to see if the user has clicked outside an element, which is tough to do, but necessary to close a popup.
 
 ### Scroll Events and Intersection Observer
 
+[see live ]()
+
+Use case is T&Cs scroll to accept within an element on page or popup. here we want to display the accept button only when the user scrolls to the bottom of the terms.
+
+Here we use intersection observer to see if something is currently viewable on page. Intersection observer will observer whether somehting is on or off or partway on/off of a page.
+
+```js
+const ob = new IntersectionObserver(obCallback, { root: terms, threshold: 1 });
+// options object with the root of what we're observing and the threshold of when to observen the element, in this case when it's 100% on screen.
+// Alterantivately, we can observe when it's off, halfway on, full on screen with an array [0, 0.5, 1]
+```
+
+The `isIntersecting` property boolean tells us if the element is on the page or off the page.
+
+The `intersectionRatio` ratio property tells us how much on the page the element is.
+
+We can use the `intersectionRatio` to tell is if we've scroll all the way to the bottom of the element.
+
 ### Tabs
+
+[see live ]()
+
+This exercise demonstrates clickable tabs to hide and show content. The tabs will be accessible via the keyboard tab key as well, using aria labels in the html tab elements. This is proper markup that is good for accessibility and SEO crawler readability.
+
+`aria-selected` attribute in the html will maintain which tab is currently selected.
+
+The tab panel div have a `hidden` attribute that we can toggle on/ off for the selected tab.
+
+The default state is to show the first tab and first tab panel only.
+
+## Logic and Flow Control
+
+### BEDMAS
+
+Order of operations in which JS runs
+
+- **B**rackets, parenthesis
+- **E**xponents
+- **D**ivision
+- **M**ultiplication
+- **A**ddition
+- **S**ubtraction
+
+### Flow Control - If statements, Function Returns, Truthy, Falsy
+
+If statements are the foundations of all logic in JS.
+They accept a boolean or a statement that evaluates to `true` or `false`.
+
+```js
+const age = 51;
+if (age > 70) {
+  console.log("In your 70s");
+} else if (age > 60) {
+  console.log("In your 60s");
+} else if (age > 50) {
+  console.log("In your 50s");
+} else {
+  console.log("Nothing was true");
+}
+```
+
+An if else statement will finish and break as soon as condition is met, i.e. true, such that subsequent `else if` will not run.
+
+So, if you want to check for multiple conditions, don't use if-else, use separate if statements; or use 1 if statement with multiple conditions.
+
+When you have an if statement inside a function, you can always `return` in side that if statement and if the if statement resolves to true, the return would end the function.
+
+**Conditional Operators:**
+
+- `===` checks for value and type, almost always use this
+- `==` checks for value
+  - why `==` exists? because of `null` and `undefined`
+  - `null == undefined` resolves to `true`
+  - you can use this to check if a variable is `null` or `undefined`
+- `!==` check for 'not equal to' in value and type
+- `!=` check for 'not equal to' in value
+- `>`, `<`, `<=`and `>=` only ever deal with numbers, so no need to check for type, only value
+- `<`
+- `||` OR
+- `&&` AND
+
+```js
+if (name === "scott" || (name === "wes" && last === "bos")) {
+  console.log("good use of BEDMAS");
+}
+```
+
+- `true && true` is true
+- `true && false` is false
+- `false && false` is false
+- `true || true` is true
+- `true || false` is true
+- `false || false` is false
+
+Built in function `.includes()` returns a boolean that can be used inside if statement conditions.
+
+**Truthy and Falsy**
+
+If statement will also take a value that is truthy or falsy.
+
+If statement will take a condition and try to coerce it to a boolean of true or false.
+
+Truthy values:
+
+- all numbers, even negative number, except zero
+- full string, even a string of zero `"0"` or space `" "`
+- `{}` empty object - here we're checking if it's there or not
+- `[]` empty array - - here we're checking if it's there or not
+
+Falsy Values:
+
+- `0`
+- `''` empty string
+- `undefined`
+- `null`
+- `Nan`
