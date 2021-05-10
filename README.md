@@ -17,6 +17,7 @@
 1. [Events](#events)
 1. [Serious Practice Exercises](#serious-practice-exercises)
 1. [Logic and Flow Control](#logic-and-flow-control)
+1. [Data Types](#data-types)
 
 ## Chrome Dev Tools
 
@@ -1239,3 +1240,523 @@ Falsy Values:
 - `undefined`
 - `null`
 - `Nan`
+
+### Coercion, Ternaries and Conditional Abuse
+
+**Coercion**
+
+Bang operator `!` flips the bool.
+
+```js
+cont bool = true
+
+if(bool) {
+  // true
+}
+
+if(!bool) {
+  // if not true i.e. if false
+}
+```
+
+Also, bang operator coerces items of a different type into a real boolean.
+
+```js
+const person = "wes";
+
+console.log(person); // string
+console.log(!person); // false
+console.log(!!person); // true
+```
+
+All truthy and falsy values can be coerced into real booleans by putting `!!` in front of it and `!` will give the opposite of what they are.
+
+If you understand truthy and falsy, it's possible that you won't need to use coercion.
+
+**Ternaries**
+
+Shorthand if-statement.
+
+Helpful when you want to quickly assign functionality based on something being true or false.
+
+Ternary needs 3 things:
+
+- a condition
+- what do to if condition is true
+- what do to if condition is false
+
+```js
+const word = count === 1 ? "item" : "items";
+
+const setence2 = `you have ${count} item${count === 1 ? "" : "s"} in your cart`;
+```
+
+Ternary can be used to run a function if a condition is true, or do nothing if a condition is false.
+
+```js
+function showAdminBar() {
+  // someting
+  console.log("showing admin bar");
+}
+
+const isAdmin = true;
+
+isAdmin ? showAdminBar() : null;
+```
+
+When we have multiiple Conditional statements chained with &&, they will short circuit i.e. as soon as one of the coniditions is false, the other conditions will not run.
+
+So, there is an && trick that quicker than the ternary operator
+
+```js
+isAdmin && showAdminBar();
+// isAdmin needs to tbe true for the rest of the statement to execut
+// i.e. for the function to run
+```
+
+This is seen in React JS alot, since it's abit difficult to do if statement in React JS.
+
+If statements on a single line don't need the `{...}` block, but curly brackets make it more readable.
+
+```js
+if (isAdmin) showAdminBar();
+```
+
+### Case Switch and Animating a Turtle with CSS Variables
+
+Find the turtle example in `/playground/switch-statements.html`
+
+```js
+switch (e.key) {
+  case "ArrowUp":
+    y -= 1;
+    rotate = -90;
+    break;
+  case "ArrowDown":
+    y += 1;
+    rotate = 90;
+    break;
+
+  case "ArrowLeft":
+    x -= 1;
+    rotate = 0;
+    flipped = true;
+    break;
+  case "ArrowRight":
+    x += 1;
+    rotate = 0;
+    flipped = false;
+    break;
+  default:
+    console.log("not a valid move");
+    break;
+}
+```
+
+### Intervals and Timers
+
+Use `setTimeout()` if you want to run something after 5 seconds.
+
+- takes 2 arguments
+- a callback function
+- number of milliseconds after which to run the callback function
+
+Use `setInterval()` if you want to run something every 5 seconds.
+
+- takes 2 arguments
+- a callback function
+- number of milliseconds after which to run the callback function
+
+These are globally available `window.` methods.
+
+The only gothca is that `setInterval` method doesn't run immediately, so you need a custom function work around.
+
+```js
+function buzzer() {
+  console.log("sound the alarm");
+}
+setTimeout(buzzer, 1000);
+setInterval(buzzer, 1000);
+
+// to have callback func run immediately and every 2 seconds after
+function setImmediateInterval(funcToRun, ms) {
+  // call function right away
+  funcToRun();
+  // run regular interval
+  return setInterval(funcToRun, ms);
+}
+
+setImmediateInterval(buzzer, 2000);
+```
+
+To clear and timer or interval, you need to have stored it in a variable first.
+
+```js
+// stop the timer
+const myTimer = setTimeout(destroy, 5000);
+clearTimeout(myTimer);
+
+// stop the timer
+const myInterval = setInterval(buzzer, 1000);
+clearInterval(myInterval);
+```
+
+## Data Types
+
+### Objects
+
+Everything in JS is an object.
+
+Objects allow us to group together keys (properties) and values.
+
+They have many uses from storing related data, functionality, custom types.
+
+Objects are used for where the order of the properties doesn't matter.
+
+Never rely on the order of properties that you put in the object to be maintained the same way.
+
+```js
+// object literal syntax
+const person = {
+  name: "wes",
+  age: 30,
+};
+```
+
+Values can be of any type.
+
+If the property (key) has the same name as the value:
+
+```js
+const age = 100;
+const person = {
+  name: "wes",
+  age,
+};
+```
+
+You can't have variables with a `-`, but you can have properties with `-`:
+
+```js
+const age = 100;
+const person = {
+  name: "wes",
+  age,
+  `cool-dude`: true,
+  'really cool': false,
+};
+```
+
+Good practice to place a trailing comma `,` after the last property-vale pair
+
+Objects can be nested:
+
+```js
+const person = {
+  name: "wes",
+  age,
+  clothing: {
+    shirts: 10,
+    pants: 2,
+  },
+};
+```
+
+Adding a new property after the object has been created is possibe:
+
+```js
+person.job = "Web Dev";
+```
+
+And you can overwrite properties be reassigning.
+
+`const`does not mean that a value of proporty in an object can't be changed, but it means the binding to that object cannot be changed i.e. the object that's been declared as a `const` cannot be overwritten entirely.
+
+Immutable object i.e. if you want to freeze the values in an object:
+
+```js
+// creates a copy of the object,for which property values cannot be changed
+const personFrozen = Object.freeze(person);
+```
+
+Access object properties via dot notation or square brackets:
+
+```js
+person.age;
+person["age"];
+person["really cool"];
+const lookUpProperty = "age";
+person[lookUpProperty];
+
+person.clothing.shirts;
+person["clothing"]["shirts"];
+```
+
+Square bracket notation is useful if the property you're after is stored in a variable, or if the property key contains special characters/ spaces.
+
+To check is properties exist, use optional chaining `?.`.
+
+Instead of causing an error if a property is not there, the expression short-circuits with a return value of undefined.
+
+```js
+person?.clothing?.pants;
+```
+
+To remove an property from an object:
+
+```js
+delete person.job;
+```
+
+A method is a function that lives inside an object.
+NOte that Arrow functions don't have access to `this` keyword.
+
+```js
+const age = 100;
+const person = {
+  name: "wes",
+  age,
+  "cool-dude": true,
+  "really cool": false,
+  clothing: {
+    shirts: 10,
+    pants: 2,
+  },
+  sayHello(greeting = "Hey") {
+    return `${greeting} ${this.name}`;
+  },
+};
+console.log(person.sayHello());
+```
+
+### Objet Reference vs Values
+
+When comparing values, `===` checks that the value and type match, which is fine for variables such as numbers and string. BUT when comparing objects, it is done by reference to the object itself, not the values inside of them.
+
+One object is not the same as another object, even if their contents are the same.
+
+```js
+const p1 = {
+  first: "wes",
+  last: "bos",
+  clothing: {
+    shirts: 10,
+    pants: 2,
+  },
+};
+
+const p2 = {
+  first: "wes",
+  last: "bos",
+};
+
+console.log(p1 === p2); // false
+```
+
+Setting a new variable equal to an existing object, doesnt make a new copy, rather it references the underlying object.
+This means any changes to the new object would reflect in the underlying object and vice versa.
+
+```js
+const p3 = p1;
+console.log(p3);
+p3.first = "jon";
+console.log(p3.first); // jon
+console.log(p1.first); // jon
+
+p1.first = "jim";
+console.log(p1.first); // jim
+console.log(p3.first); // jim
+```
+
+When objects (and arrays, maps, sets) are created by reference, they simply point to the original underlying object (or array, map, set), instead of making a copy of it.
+
+There are a couple of ways to copy an object
+
+- easiest is via spread operator `...` that takes every single item in an object and spreads it into the new object
+- another way is to use `Object.assign()`.
+
+However, this copying only goes one level deep - anything from level 2 onwards is a reference, not a copy
+
+So, spread `...` and `Object.assign()` only do shallow copies.
+
+```js
+// copy object using spread
+const p4 = { ...p1 };
+
+p4.first = "jimbob";
+console.log(p4.first); // jimbob
+console.log(p1.first); // jim
+
+p4.clothing.pants = 100;
+console.log(p4.clothing.pants); // 100
+console.log(p1.clothing.pants); // 100
+
+// object assign
+const p5 = Object.assign({}, p1);
+```
+
+There are a number of ways to do a deep copy of an object e.g. via a utility library such as [Lodash](https://lodash.com/).
+
+We can load lodash using the [UNPKG](https://unpkg.com/) url in a script tag above your other JS script tags.
+
+```html
+<script src="https://unpkg.com/lodash@4.17.21/lodash.js"></script>
+```
+
+Lodash methods are available using `_.`.
+
+```js
+const p5 = _.cloneDeep(p1);
+p5.clothing.pants = 1;
+console.log(p5.clothing.pants); // 1
+console.log(p1.clothing.pants); // 100 too
+```
+
+Spread `...` can be used to merge objects. Note that if there are duplicates, the last one will win.
+
+```js
+const meatInventory = {
+  bacon: 2,
+  sausage: 3,
+  oyster: 10,
+};
+
+const veggieInventory = {
+  lettuce: 5,
+  tomatoes: 3,
+  oyster: 15, // wins
+};
+
+const inventory = {
+  ...meatInventory,
+  ...veggieInventory,
+  carrots: 10,
+};
+```
+
+The reference vs copy situation also applies to functions when passing in objects:
+
+```js
+const name1 = "wes";
+function doStuff(data) {
+  data = "something else";
+  console.log(data); // no reference issues
+}
+
+doStuff(name1);
+console.log(name1);
+
+function doStuff2(data) {
+  data.tomatoes = 10000;
+  console.log(data);
+}
+
+doStuff2(inventory);
+console.log(inventory); // reference issue, tomatoes added to underlying object
+```
+
+This is a huge source of bugs and something to be aware of when modifying and object within a function, as it will modify the underlying object outside of the function.
+Therefore use Lodash to make a deep copy.
+
+### Maps
+
+Maps are similar to objects, with some key differences.
+
+Create via `new Map()` and modify via `set(key, val)`, `has()`, `delete()` methods.
+
+One benefit of a Map is that the keys can be of any type, rather than variable name, and of course, values can be of any type too.
+With an object, you can only put any type within the value portion, not the key.
+
+Maps are useful for dictionaries.
+
+Any time you create and Object, stop to think if we could use a Map instead.
+
+With a Map, order is guaranteed, which is not true for Objects.
+
+When to use a Map if you need to maintain the order of your items
+
+You can pass items into the Map, but there is not Map literal, it has to be created using `Map()`.
+
+Passing items into a Map using an array of arrays:
+`new Map(['name', 'wes'],['age'. 100])`
+
+To delete items in a map `myMap.delete(field)`.
+
+In an Object you can places functions inside, such that they become Methods. You can't do this with a Map. Maps are only to store data.
+
+Every time you want to share Object server-2-server, you first need to convert it into text format using JSON i.e. `JSON.stringify(myObject)`. This can be reveresed, from a string to an object, using `JSON.parse('{"name":"wes", "age":100}')`
+
+JSON = JavaScript Object Notation, thought it's become universal between all langauges.
+
+Currently JSON doesn't not handle Maps, though this might change with JSON v5.
+
+TO send a Map, first convert to an Object, then to JSON.
+Converting Map to Object `Object.fromEntries(myMap)`, but it's not perfect.
+
+Objects are used more frequently, but Maps will catch on.
+
+```js
+const myMap = new Map();
+console.log(myMap);
+
+myMap.set("name", "wes");
+console.log(myMap);
+
+// Map key can be any type
+myMap.set(100, "this is a number");
+console.log(myMap);
+
+const person1 = {
+  name: "wes",
+  age: 200,
+};
+
+// Maps are useful as dictionaries
+// key can be a reference to an object, in case we want to store additional information
+myMap.set(person1, "Really Cool");
+console.log(myMap);
+console.log(person1);
+
+// lookup dictionary
+console.log(myMap.get(person1));
+
+const score = 200;
+const prizes = new Map();
+prizes.set(100, "Teddy bear");
+prizes.set(200, "Giant bear");
+prizes.set(300, "$50 voucher");
+// here we look up the number to see the prize
+console.log(`you win a ${prizes.get(score)}`);
+
+// see the size of a map
+console.log(myMap.size);
+
+// Order is guaranteed with Map
+// select ul
+const ul = document.querySelector(".prizes");
+prizes.forEach((entry) => {
+  console.log(entry);
+});
+
+// for of method
+for (const prize of prizes) {
+  console.log(prize); // array of [key, value]
+  console.log(prize[0], prize[1]);
+}
+
+// for of method with destructuring
+for (const [points, prize] of prizes) {
+  console.log(points, prize);
+  const li = `<li>${points} points gets a ${prize}</li>`;
+
+  ul.insertAdjacentHTML("beforeend", li);
+}
+```
+
+### Arrays
+
+### Array Cardio - Static Methods
+
+### Array Cardio - Instance Methods
+
+### Array Cardio - Callback Methods and Function Generation

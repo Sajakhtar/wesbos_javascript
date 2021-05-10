@@ -108,6 +108,77 @@
             }
     });
     console.groupEnd();
+
+    console.clear();
+
+    // coercion
+
+    const person = 'wes';
+
+    console.log(person); // string
+    console.log(!person); // false
+    console.log(!!person); // true
+
+    // ternary
+    const count = 1;
+//     let word;
+
+//     if (count === 1) {
+//             word = 'item';
+//     } else {
+//             word = 'items';
+//     }
+
+// a condition
+// what do to if condition is true
+// what do to if condition is false
+    const word = count === 1 ? 'item' : 'items';
+
+    const setence = `you have ${count} ${word} in your cart`;
+    console.log(setence);
+
+    const setence2 = `you have ${count} item${count === 1 ? '' : 's'} in your cart`;
+    console.log(setence2);
+
+    function showAdminBar() {
+            console.log('showing admin bar');
+    }
+
+    const isAdmin = true;
+
+    isAdmin ? showAdminBar() : null;
+
+    // AND AND TRICK
+    function check1() {
+            console.log('running check 1');
+            return true;
+    }
+
+    function check2() {
+            console.log('running check 2');
+            return false;
+    }
+
+    function check3() {
+            console.log('running check 3');
+            return true;
+    }
+
+    if (check1() && check2() && check3()) {
+            console.log('all checks passed');
+    } else {
+            console.log('some checks failed');
+    }
+
+    check1() && check2() && check3() ? console.log('yea') : null;
+
+    // the trick
+    check1() && check2() && check3() && console.log('yea');
+
+    isAdmin && showAdminBar();
+
+    // If statements on a single line don't need the `{...}` block.
+    if (isAdmin) showAdminBar();
   </script>
 </body>
 

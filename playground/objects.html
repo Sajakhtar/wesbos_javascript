@@ -1,0 +1,163 @@
+  
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+    <input type="text" name="first" value="wes">
+    <script src="https://unpkg.com/lodash@4.17.21/lodash.js"></script>
+  <script>
+      const person = {
+              name: 'wes',
+              age: 30,
+      };
+      console.log(person.name);
+
+      const person2 = new Object({
+              name: 'jon',
+              age: 34,
+      });
+      console.log(person2.name);
+
+      const age = 100;
+      const person3 = {
+              name: 'wes',
+              age,
+              'cool-dude': true,
+              'really cool': false,
+              clothing: {
+                      shirts: 10,
+                      pants: 2,
+              },
+              sayHello(greeting = 'Hey') {
+                      // method shorthand
+                      return `${greeting} ${this.name}`;
+              },
+              sneeze: () => `AHHHHHH CHOOO`,
+      };
+      console.log(person3['cool-dude']);
+
+      // creating new property and update property value
+      person3.job = 'Web Dev';
+      person3.age = 50;
+      console.log(person3);
+
+      // Immutable object
+//   const personFrozen = Object.freeze(person3);
+//   personFrozen.age = 1000; // doesnt work
+//   console.log(personFrozen);
+
+      // optional chaining
+      console.log(person3?.clothing?.pants);
+
+      const nameInput = document.querySelector('[name="first"]');
+      
+      // check object exists
+      const name = nameInput ? nameInput.value : '';
+      console.log(name);
+
+      // delete property
+      console.log(person3.job);
+      console.log(delete person3.job);
+      console.log(person3.job);
+
+      // Methods
+      console.log(person3.sayHello());
+      console.log(person3.sneeze());
+
+      // Reference vs Value
+
+      const p1 = {
+              first: 'wes',
+              last: 'bos',
+              clothing: {
+                      shirts: 10,
+                      pants: 2,
+              },
+      };
+
+      const p2 = {
+              first: 'wes',
+              last: 'bos',
+      };
+
+      console.log(p1 === p2); // false
+
+      const p3 = p1;
+      console.log(p3);
+      p3.first = 'jon';
+      console.log(p3.first);
+      console.log(p1.first); // underling object updated too
+
+      p1.first = 'jim';
+      console.log(p1.first);
+      console.log(p3.first); // reference object update too
+
+      // copying objects 2 methods
+      const p4 = { ...p1 };
+      // const p5 = Object.assign({}, p1)
+
+      p4.first = 'jimbob';
+      console.log(p4.first);
+      console.log(p1.first);
+
+      // copying is one level deep
+      p4.clothing.pants = 100;
+      console.log(p4.clothing.pants);
+      console.log(p1.clothing.pants); // 100 too
+
+      // deep copy using lodash library
+      const p5 = _.cloneDeep(p1);
+      p5.clothing.pants = 1;
+      console.log(p5.clothing.pants); // 1
+      console.log(p1.clothing.pants); // 100 too
+
+      // merging objects
+      const meatInventory = {
+              bacon: 2,
+              sausage: 3,
+              oyster: 10,
+};
+
+      const veggieInventory = {
+              lettuce: 5,
+              tomatoes: 3,
+              oyster: 15,
+      };
+
+      const inventory = {
+              ...meatInventory,
+              ...veggieInventory,
+              carrots: 10,
+      };
+
+      console.log(inventory);
+
+      // reference also applies to functions
+      const name1 = 'wes';
+      function doStuff(data) {
+              data = 'something else';
+              console.log(data); // no reference issues
+      }
+
+      doStuff(name1);
+      console.log(name1);
+
+      function doStuff2(data) {
+              data.tomatoes = 10000;
+              console.log(data);
+      }
+
+      doStuff2(inventory);
+      console.log(inventory); // reference issue, tomatoes added to underlying object
+  </script>
+  </script>
+</body>
+
+</html>

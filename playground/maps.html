@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Maps</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+
+    <ul class="prizes">
+
+    </ul>
+  <script>
+      const myMap = new Map();
+      console.log(myMap);
+
+      myMap.set('name', 'wes');
+      console.log(myMap);
+
+      // Map key can be any type
+      myMap.set(100, 'this is a number');
+      console.log(myMap);
+
+      const person1 = {
+              name: 'wes',
+              age: 200,
+      };
+
+      // Maps are useful as dictionaries
+      // key can be a reference to an object, in case we want to store additional information
+      myMap.set(person1, 'Really Cool');
+      console.log(myMap);
+      console.log(person1);
+
+      // lookup dictionary
+      console.log(myMap.get(person1));
+
+      const score = 200;
+      const prizes = new Map();
+      prizes.set(100, 'Teddy bear');
+      prizes.set(200, 'Giant bear');
+      prizes.set(300, '$50 voucher');
+      // here we look up the number to see the prize
+      console.log(`you win a ${prizes.get(score)}`);
+
+      // see the size of a map
+      console.log(myMap.size);
+
+      // Order is guaranteed with Map
+      // select ul
+      const ul = document.querySelector('.prizes');
+      prizes.forEach((entry) => {
+              console.log(entry);
+      });
+
+      // for of method
+      for (const prize of prizes) {
+              console.log(prize); // array of [key, value]
+              console.log(prize[0], prize[1]);
+      }
+
+      // for of method with destructuring
+      for (const [points, prize] of prizes) {
+              console.log(points, prize);
+              const li = `<li>${points} points gets a ${prize}</li>`;
+      
+              ul.insertAdjacentHTML('beforeend', li);
+      }
+  </script>
+</body>
+
+</html>
