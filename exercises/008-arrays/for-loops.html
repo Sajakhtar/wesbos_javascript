@@ -1,0 +1,104 @@
+  
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>For Loops</title>
+</head>
+
+<body>
+  <script>
+    const numbers = [2, 34, 3, 23, 42, 3, 1, 65, 364, 5, 645, 6];
+
+    const name = 'Wes Bos👪🏻🎅🏻👩‍👩‍👧‍👦';
+
+    // For
+    for (let i = 0; i <= 10; i++) {
+            console.log(i);
+    }
+
+    for (let i = 100; i <= 120; i += 2) {
+            console.log(i);
+    }
+
+    for (let i = 0; i < numbers.length; i++) {
+            console.log(numbers[i]);
+    }
+
+    // For of
+
+    for (const char of name) {
+            console.log(char);
+    }
+
+    for (const num of numbers) {
+            console.log(num);
+    }
+
+    // For in
+    // gives the keys
+    // good for looping over keys of an object
+    for (const num in numbers) {
+            console.log(num);
+    }
+    
+    const person = {
+            name: 'wes',
+            age: 100,
+            cool: true,
+    };
+
+    for (prop in person) {
+            console.log(prop);
+    }
+
+    const baseHumanStats = {
+            feet: 2,
+            arms: 2,
+            eyes: 2,
+            head: 1,
+    };
+function Human(name) {
+            this.name = name;
+}
+
+Human.prototype = baseHumanStats;
+
+const wes = new Human('wes');
+
+console.log(wes);
+
+// we can reference values of the prototype
+// it first check the property on the object, if it's not there, it then checks in the prototype
+console.log(wes.feet);
+
+console.log(Object.keys(wes)); // ['name']
+
+for (prop in wes) {
+            console.log(prop); // loops through object key and prototype keys
+    }
+
+    // While Loop
+    let cool = true;
+    let i = 0;
+    while (cool === true) {
+            console.log('you are cool');
+            i++;
+            i > 99 ? (cool = false) : null; // exit condition
+    }
+
+    // Do While Loop
+    let smart = true;
+    let j = 0;
+    do {
+            console.log('you are smart');
+            j++;
+            j > 99 ? (smart = false) : null; // exit condition
+    } while (smart === true);
+  </script>
+</body>
+
+</html>

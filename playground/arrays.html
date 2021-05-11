@@ -1,0 +1,106 @@
+  
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>
+
+  </title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+
+    <script>
+        const names = ['wes', 'jon', 'snickers', 'jimbob'];
+        console.log(names);
+        console.log(names.length);
+        console.log(typeof names); // object
+        console.log(Array.isArray(names)); // true
+        console.log(names[2]);
+        console.log(names[names.length - 1]); // last item
+
+        // Mutable Method
+        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        const backwards = numbers.reverse();
+        console.log(numbers); // also reversed
+        console.log(backwards);
+
+        // Immutable Method
+        const sliced = numbers.slice(2, 4);
+        console.log(numbers); // unaffected
+        console.log(sliced);
+
+        // copy array then apply mutable method, so original is not affected
+        const numbers2 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        const reversed = [...numbers2].reverse();
+        console.log(reversed);
+        console.log(numbers2); // unaffected
+
+        // adding items to end
+        const names2 = ['wes', 'jon', 'snickers', 'jimbob'];
+        names2.push('jane');
+        console.log(names2);
+
+        // workaround for mutability
+        const names3 = [...names2, 'john'];
+        console.log(names3);
+
+        // adding items to end
+        names2.unshift('joe');
+        console.log(names2);
+
+        // workaround for mutablity
+        const names4 = ['bob', ...names2];
+        console.log(names4);
+
+        // Slice (immutable) and Splice (mutable)
+        console.log(numbers2);
+        numbers2.splice(3, 2);
+        console.log(numbers2);
+
+        // adding items to the middle
+        const bikes = ['bianchi', 'miele', 'panasonic', 'miyata'];
+        const newBikes = [...bikes.slice(0, 2), 'specialized', ...bikes.slice(2)];
+        console.log(newBikes);
+
+        // removing items
+        const newBikes2 = [...newBikes.slice(0, 3), ...newBikes.slice(4)];
+        console.log(newBikes2);
+
+        // Find index of items
+        const jonIndex = names2.findIndex((name) => name === 'jon');
+        console.log(names2);
+        console.log(jonIndex);
+        console.log(names2[jonIndex]);
+
+        const namesWithoutJon = [...names2.slice(0, jonIndex), ...names2.slice(jonIndex + 1)];
+        console.log(namesWithoutJon);
+
+        const comments = [
+                { text: 'Cool Beans', id: 123 },
+                { text: 'Love this', id: 133 },
+                { text: 'Neato', id: 233 },
+                { text: 'good bikes', id: 333 },
+                { text: 'so good', id: 433 },
+        ];
+
+        console.log(comments);
+
+        function deleteComment(id, comments) {
+                // find index of ID
+                const commentIndex = comments.findIndex((comment) => comment.id === id);
+                // make new array without that item
+                // return new array
+                return [...comments.slice(0, commentIndex), ...comments.slice(commentIndex + 1)];
+        }
+
+        const updatedComments = deleteComment(233, comments);
+        console.log(updatedComments);
+    </script>
+
+</body>
+
+</html>

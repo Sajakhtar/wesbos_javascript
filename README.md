@@ -18,6 +18,8 @@
 1. [Serious Practice Exercises](#serious-practice-exercises)
 1. [Logic and Flow Control](#logic-and-flow-control)
 1. [Data Types](#data-types)
+1. [Looping and Iterating](#looping-and-iterating)
+1. [Harder Practice Exercises](#harder-practice-exercises)
 
 ## Chrome Dev Tools
 
@@ -1669,6 +1671,8 @@ With an object, you can only put any type within the value portion, not the key.
 
 Maps are useful for dictionaries.
 
+To check the size of a Map: `myMap.size`.
+
 Any time you create and Object, stop to think if we could use a Map instead.
 
 With a Map, order is guaranteed, which is not true for Objects.
@@ -1755,8 +1759,952 @@ for (const [points, prize] of prizes) {
 
 ### Arrays
 
+Arrays holds a list of items where the order matters.
+
+Each thing inside an array is called an item, and it's position is an index. Array has no keys.
+
+The number inside an array is called a length.
+
+Each item inside an array can be of any type.
+
+Arrays are still JS objects, they have methods that can be called upon them.
+
+To check if something is an array: `Array.isArray(myArr)`
+
+Arrays are zero-index and you access items by referencing the index.
+
+```js
+const names = ["wes", "jon", "snickers"];
+console.log(names);
+console.log(names.length);
+console.log(typeof names); // object
+console.log(Array.isArray(names)); // true
+console.log(names[2]);
+console.log(names[names.length - 1]); // last item
+```
+
+There are many array methods.
+
+_Mutable methods_ perform mutations i.e. they change the original array.
+
+_Immutable methods_ don't change the original array, but return a new array.
+
+```js
+// Mutable Method
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const backwards = numbers.reverse();
+console.log(numbers); // also reversed
+console.log(backwards);
+
+// Immutable Method
+const sliced = numbers.slice(2, 4);
+console.log(numbers); // unaffected
+console.log(sliced);
+```
+
+Any time you want to use a mutation method and NOT mutate the original array, make a copy of the original array using the spread operator, then apply the mutable method.
+
+```js
+const numbers2 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const reversed = [...numbers2].reverse();
+console.log(reversed);
+console.log(numbers2); // unaffected
+```
+
+Most methods are immutable, there are just a couple of gotchas.
+
+React developers have a mantra to not mutate the original array, instead create a copy to be the modified version.
+
+The most basic thing we'd want to do to an array is add items to it - done via `.push()` and `.unshift()` methods, though this does mutate the original array.
+
+```js
+// add items to end of array
+const names2 = ["wes", "jon", "snickers", "jimbob"];
+names2.push("jane");
+console.log(names2);
+
+// workaround for mutablity
+const names3 = [...names2, "john"];
+console.log(names3);
+// this is done in React to take a copy and update state, rather than push items into state
+
+// add items to start of array
+names2.unshift("joe");
+console.log(names2);
+
+// workaround for mutablity
+const names4 = ["bob", ...names2];
+console.log(names4);
+```
+
+Two methods that you will forever mess up are `slice()` and `splice()`. Both used for grabbing a subset of the array
+
+- `slice(start, end)` is immutable, returns a shallow copy
+- `splice(start, #items)` is mutable, takes items out of original array
+
+More often that not, we would want to use `slice`, as it does not mutate the original array.
+
+Adding and removing items from the middle of an array:
+
+```js
+// adding items to the middle
+const bikes = ["bianchi", "miele", "panasonic", "miyata"];
+const newBikes = [...bikes.slice(0, 2), "specialized", ...bikes.slice(2)];
+console.log(newBikes);
+
+// removing items
+const newBikes2 = [...newBikes.slice(0, 3), ...newBikes.slice(4)];
+console.log(newBikes2);
+```
+
+Common to use index to find the item to remove - common in React and Angular.
+
+Using `findIndex()` to remove an item:
+
+```js
+// Find index of an item
+const jonIndex = names2.findIndex((name) => name === "jon");
+console.log(names2);
+console.log(jonIndex);
+console.log(names2[jonIndex]);
+
+const namesWithoutJon = [
+  ...names2.slice(0, jonIndex),
+  ...names2.slice(jonIndex + 1),
+];
+console.log(namesWithoutJon);
+```
+
+Same again but with an array of objects:
+
+```js
+const comments = [
+  { text: "Cool Beans", id: 123 },
+  { text: "Love this", id: 133 },
+  { text: "Neato", id: 233 },
+  { text: "good bikes", id: 333 },
+  { text: "so good", id: 433 },
+];
+
+console.log(comments);
+
+function deleteComment(id, comments) {
+  // find index of ID
+  const commentIndex = comments.findIndex((comment) => comment.id === id);
+  // make new array without that item
+  // return new array
+  return [
+    ...comments.slice(0, commentIndex),
+    ...comments.slice(commentIndex + 1),
+  ];
+}
+```
+
 ### Array Cardio - Static Methods
+
+There are `array.methods()` and `array.prototype.methods()`
+
+- `array.methods()` are static methods that are utility methods called by `Array.method()`, but not on an array that you created.
+- `array.prototype.methods()` are instance, or prototypal, methods that are available for every array that is created and called on your array `myArray.method()`
+
+`Array.of()` creates an array from it's arguments, but typically you would just create an array literal.
+
+```js
+Array.of("wes", "jim", "bob", "jon");
+
+[..."wes"]; // ['w', 'e', 's']
+Array.of(..."wes"); // ['w', 'e', 's']
+```
+
+`Array.from()` will take an iterable, something with length, and returns an array with that many empty slots. It also takes a second arguement, a map function to decide what to put into those slots.
+
+```js
+Array.from({ length: 10 });
+
+// An array of 1-9 using the index
+const range = Array.from({ length: 10 }, function (_item, _index) {
+  return _index;
+});
+
+console.log(range);
+
+function createRange(start, end) {
+  const range = Array.from({ length: end - start + 1 }, function (
+    _item,
+    _index
+  ) {
+    return _index + start;
+  });
+  return range;
+}
+
+const myRange = createRange(3, 7);
+console.log(myRange);
+
+// Array.isArray() static method
+console.log(Array.isArray(myRange));
+```
+
+Object static methods - Creating arrays from Objects properties (keys), values and entries
+
+```js
+const meats = {
+  beyond: 10,
+  beef: 5,
+  pork: 7,
+};
+
+console.log(Object.entries(meats)); // [[key1, val1], [key2, val2], ...]
+console.log(Object.keys(meats)); // [key1, key2, ...]
+console.log(Object.values(meats)); // [val1, val2, ...]
+
+Object.values(meats).forEach((qty) => {
+  console.log(qty);
+});
+
+// looping through the Object arrays
+Object.entries(meats).forEach((entry) => {
+  console.log(entry);
+  // const meat = entry[0];
+  // const qty = entry[1];
+  const [meat, qty] = entry; // destructuring
+  console.log(meat, qty);
+});
+
+// destructuring even further
+Object.entries(meats).forEach(([meat, qty]) => {
+  console.log("destructured", meat, qty);
+});
+
+Object.keys(meats).forEach((meat) => {
+  console.log(meat);
+});
+
+Object.values(meats).forEach((qty) => {
+  console.log(qty);
+});
+```
 
 ### Array Cardio - Instance Methods
 
+Here we run through the most common methods.
+
+Join items in an array into a comma separated string using `myArr.join()` or pass in any delimitere e.g. `myArr.join(' or ')`.
+
+Convert string into an array, default it split by comma, `'hot dogs,hamburgers,sausages,corn'.split()`, but can use a delimiter e.g. `console.log('hot dogs,hamburgers,sausages,corn'.split(' '))`.
+
+Splitting on nothing would place each character as an item in the array e.g `console.log('hello'.split(''))`.
+
+Removing the last item of array using pop method i.e. `myArr.pop()` and adding to the end of an array via push i.e. `myArr.push('something')`.
+
+Remove the first item of an array using shift method i.e. `myArr.shift()` and adding an item to start of an array using unshift method i.e. `myArr.unhift('something')`
+
+`pop`, `push`. `shift()` and `unshift()` are mutable methods, i.e. they change the original array.
+
+Get arround `pop` mutability by making a copy of a slice of the original array `newArr = myArr.slice(0, myArr.length - 1)`.
+
+Get arround `shift` mutability by making a copy of a slice of the original array `newArr = myArr.slice(1)`.
+
+Get arround `push` mutability by spread `newArr = myArr.slice(newArr, myArr[length - 1])`.
+
+Get arround `unshift` mutability by spread `newArr = myArr.slice(myArr[0], newArr)`.
+
+`myArr.indexOf('something')` will find the index of an item in an array, while `myArr.lastIndexOf('something')` last index of the last instance of an item in an array.
+
+`myArr.includes('something')` returns a boolean if the item exists in the array.
+
+`myArr.reverse()` reverses the items in an array, and it mutable i.e. changes the original array. Workaround is `[...myArr].reverse()`.
+
 ### Array Cardio - Callback Methods and Function Generation
+
+Array methods that take a function as an arguement, often called a callback.
+
+```js
+myArr.find((item) => item.includes("something")); // returns the matching item
+```
+
+```js
+const feedback = [
+  { comment: "Love the burgs", rating: 4 },
+  { comment: "Horrible Service", rating: 2 },
+  { comment: "Smoothies are great, liked the burger too", rating: 5 },
+  { comment: "Ambiance needs work", rating: 3 },
+  { comment: "I DONT LIKE BURGERS", rating: 1 },
+];
+// find the first rating that talks about a burger with find()
+const burgerComment = feedback.find((rating) =>
+  rating.comment.includes("burg")
+);
+console.log(burgerComment);
+
+// call back can be any type of function
+// normal function
+// function findBurgRating(singleFeedback) {
+//         return singleFeedback.comment.includes('burg');
+// }
+
+// function expression
+// const findBurgRating = function (singleFeedback) {
+//         return singleFeedback.comment.includes('burg');
+// };
+
+// arrow function with implicit return
+const findBurgRating = (singleFeedback) =>
+  singleFeedback.comment.includes("burg");
+
+const burgerComment2 = feedback.find(findBurgRating);
+console.log(burgerComment2);
+
+// create a utilities object with methods for what functions we need
+const util = {
+  findBurgRating: function findBurgRating(singleFeedback) {
+    return singleFeedback.comment.includes("burg");
+  },
+};
+
+const burgerComment3 = feedback.find(util.findBurgRating);
+console.log(burgerComment3);
+
+// another method is to use modeules where we import and export them - stay tuned
+
+// higher order functions return a function
+// currently findBurgRating works only for burgers, so we need a functions that'll return the function to find a specific word
+
+function findByWord(word) {
+  return function (singleFeedback) {
+    return singleFeedback.comment.includes(word);
+  };
+}
+
+const burgFinder = findByWord("burg"); // burger function
+const burgerComment4 = feedback.find(burgFinder);
+console.log(burgerComment4);
+
+const smoothieFinder = findByWord("Smooth"); // smoothie function
+const smoothieComment = feedback.find(smoothieFinder);
+console.log(smoothieComment);
+
+// or pass the master function directly in the callback
+const smoothieComment2 = feedback.find(findByWord("Smooth"));
+console.log(smoothieComment2);
+```
+
+Higher order functions return a function.
+
+Filter method
+
+```js
+myArr.filter((item) => item.includes("something")); // returns array of the matching items
+```
+
+```js
+const goodReviews = feedback.filter((review) => review.rating > 2);
+console.table(goodReviews);
+
+function filterByMinRating(minRating) {
+  return function (singleFeedback) {
+    return singleFeedback.rating >= 2;
+  };
+}
+
+const goodReviews2 = feedback.filter(filterByMinRating(3));
+console.table(goodReviews2);
+
+const burgReviews = feedback.filter((review) =>
+  review.comment.includes("burg")
+);
+console.table(burgReviews);
+
+// findByWord function can be in .find and .filter methods - DRY
+const burgReviews2 = feedback.filter(findByWord("burg"));
+console.table(burgReviews2);
+
+// filter items out of the array of review objects
+const legitReviews = feedback.filter((review) => review.rating !== 1);
+console.table(legitReviews);
+```
+
+`myArr.some(callback)` and `myArr.every(callback)`returns a boolean.
+
+- `some` checks if any array items meet the criteria
+- `every`checks if all array items meet the criteria
+
+```js
+const meats = {
+  beyond: 10,
+  beef: 5,
+  pork: 7,
+};
+
+// check if there is at least 5 of one type of meat with some()
+const isThereEnoughOfAtLeastOneMeat = Object.values(meats).some(
+  (meatVal) => meatVal >= 5
+);
+console.log(isThereEnoughOfAtLeastOneMeat);
+
+// make sure we have at least 3 of every meat with every()
+const isThereEnoughOfEveryMeat = Object.values(meats).every(
+  (meatVal) => meatVal >= 3
+);
+console.log(isThereEnoughOfEveryMeat);
+```
+
+`myArr.sort(callback)` sorts array items according to a _compare_ callback function. When looping through the array, `sort` compares the current item to the next item and switches the elements around according the condition that resolves to 0,1, or -1.
+
+- `-1` maintains the items positions as they are, status quo
+- `0 ` leaves the current and next items unchanged w.r.t. each other, but sorted w.r.t. other items
+- `1` moves the next itme before current item
+
+Sorting numbers:
+
+```js
+const nums = [1, 2, 100, 3, 200, 400, 155];
+const numsSorted = nums.sort();
+console.log(numsSorted); // sorted alphabetically as strings
+
+const numsSorted2 = nums.sort((a, b) => a - b);
+console.log(numsSorted2);
+```
+
+```js
+const toppings = [
+  "Mushrooms ",
+  "Tomatoes",
+  "Eggs",
+  "Chili",
+  "Lettuce",
+  "Avocado",
+  "Chiles",
+  "Bacon",
+  "Pickles",
+  "Onions",
+  "Cheese",
+];
+
+// sort the toppings alphabetically with sort()
+const toppingsSorted = toppings.sort();
+console.log(toppingsSorted);
+
+const toppingsSorted2 = toppings.sort((a, b) => a - b);
+console.log(toppingsSorted2);
+
+const orderTotals = [342, 1002, 523, 34, 634, 854, 1644, 2222];
+
+const orderTotalsSorted = orderTotals.sort((a, b) => b - a);
+console.log(orderTotalsSorted);
+
+function numberSort(a, b) {
+  return b - a;
+}
+
+const orderTotalsSorted2 = orderTotals.sort(numberSort);
+console.log(orderTotalsSorted2);
+
+const prices = {
+  hotDog: 453,
+  burger: 765,
+  sausage: 634,
+  corn: 234,
+};
+
+// Sort the prices with sort()
+
+// Object.entries creates an 2d array [[hotDog, 453], [burger, 765], ...]
+// the prices is in position 1in the nested arrays, so we use that to sort
+const pricesSortedArr = Object.entries(prices).sort((a, b) => a[1] - b[1]);
+console.table(pricesSortedArr);
+
+// convert back to an object
+const pricesSortedObject = Object.fromEntries(pricesSortedArr);
+console.log(pricesSortedObject);
+
+// in one line - not good for readability
+const pricesSortedObject2 = Object.fromEntries(
+  Object.entries(prices).sort((a, b) => a[1] - b[1])
+);
+console.log(pricesSortedObject2);
+```
+
+**NOTE**: Objects now do maintain order, except if the parameter (key) is named with a number. Parameters starting with a number will go to the top of the object.
+
+Data massaging using Array methods such as `sort`, `filter`, `forEach`, `map`, `reduce` is the bulk of what devs do when they get data returned from a database and before they put that data into the frontend.
+
+## Looping and Iterating
+
+Most looping in JS is done over an array.
+
+### Looping and Iterating: Array .forEach()
+
+`.forEach()` is the most basic loop - it executes the callback for each item in the array.
+
+`.forEach()` is different than the rest of the looping values, as it doesnt return anything to us, it just does some work for every item in the array e.g.
+
+- log each item
+- attach an event listener to each item
+- display data on the page
+
+This is referred to side effects i.e. when you're inside of a function and you reach outside of a function to do someting else.
+
+The big 3, `map()`, `filter()` and `reduce()` take in data and return modified/ massaged/ transformed data, and they don't reach outside of the function to do this.
+
+A good illustration of the differences between [map, filter and reduce](https://www.globalnerdy.com/2016/06/23/map-filter-and-reduce-explained-using-emoji/)
+
+```js
+const toppings = [
+  "Mushrooms ",
+  "Tomatoes",
+  "Eggs",
+  "Chili",
+  "Lettuce",
+  "Avocado",
+  "Chiles",
+  "Bacon",
+  "Pickles",
+  "Onions",
+  "Cheese",
+];
+
+function logTopping(topping) {
+  console.log(topping);
+}
+
+toppings.forEach(logTopping);
+
+// or in one line
+toppings.forEach((topping) => console.log(topping));
+
+// we have access to the item, the index and the entire Array
+function logTopping2(topping, index, array) {
+  console.log(topping, index, array);
+}
+
+toppings.forEach(logTopping2);
+
+toppings.forEach((topping, i, array) => console.log(topping, i, array));
+
+function logTopping3(topping, index, originalArray) {
+  // log the topping
+  console.log(topping);
+  // log the prev topping if there is one
+  const prevTopping = originalArray[index - 1];
+  prevTopping ? console.log(prevTopping) : null;
+
+  // log the next topping if there is one
+  const nextTopping = originalArray[index + 1];
+  nextTopping ? console.log(nextTopping) : null;
+
+  // if its the last item in the array, say good bye
+  console.log("-------🍕-------");
+
+  if (index === originalArray.length - 1) {
+    console.log("Goodbye");
+  }
+
+  index === originalArray.length - 1 && console.log("Goodbye hack");
+}
+
+toppings.forEach(logTopping3);
+```
+
+### Looping and Iterating: Mapping
+
+`myArr.map()` is like a machine in a factory, it takes in data, performs an operation and spits it out on the other side. It will always produce the same length array as it started with.
+
+```js
+const faces = ["😃", "🤠", "🤡", "🤑", "😵", "🌞", "🐶", "😺"];
+
+function addArms(face) {
+  return `👋 ${face} 👋`;
+}
+
+const toys = faces.map(addArms);
+console.log(toys);
+
+const fullNames = ["wes", "jim", "jon"].map((name) => `${name} Bos`);
+console.log(fullNames);
+
+// more advanced Maps
+function capitalize(word) {
+  return `${word[0].toUpperCase()}${word.slice(1)}`;
+}
+
+function bosify(name) {
+  return `${capitalize(name)} Bos`;
+}
+
+const fullNames2 = ["wes", "jim", "jon"].map(bosify);
+console.log(fullNames2);
+
+// or chain Maps
+const fullNames3 = ["wes", "jim", "jon"].map(capitalize).map(bosify);
+console.log(fullNames3);
+
+// Map with numbers
+const orderTotals = [342, 1002, 523, 34, 634, 854, 1644, 2222];
+
+const orderTotalsWithTax = orderTotals.map((total) =>
+  Math.round((total *= 1.12))
+);
+console.log(orderTotalsWithTax);
+```
+
+More often than not, we'll be working with an array of objects that comes back from an API which is not in the format that you need it.
+
+Don't evern update the DOM inside a map function, that's what `forEach` is for.
+
+Mapping on arrays of objects:
+
+```js
+const people = [
+  {
+    birthday: "April 22, 1993",
+    names: {
+      first: "Keith",
+      last: "Buckley",
+    },
+  },
+  {
+    birthday: "January 3, 1975",
+    names: {
+      first: "Larry",
+      last: "Heep",
+    },
+  },
+  {
+    birthday: "February 12, 1944",
+    names: {
+      first: "Linda",
+      last: "Bermeer",
+    },
+  },
+];
+
+const cleanPeople = people.map(function (person) {
+  // get birthday timestamp
+  const bday = new Date(person.birthday).getTime();
+  // console.dir(bday); // to see all date methods
+
+  // calculate age
+  const now = Date.now(); // current timestamp
+  // console.dir(now);
+
+  // to compare dates, change to timestamps in milliseconds
+
+  // 1000 ms in a second, 60s in mins, 60m in hour, 24h in day, 365d in year
+  const age = Math.floor((now - bday) / (1000 * 60 * 60 * 24 * 365));
+  // onsole.log(age);
+
+  // return object of full name, birthday
+  return { name: `${person.names.first} ${person.names.last}`, age };
+});
+
+console.table(cleanPeople);
+```
+
+[Epoch](https://epoch.vercel.app/) website to convert dates to epoch timestamp.
+
+JavaScript deals with milliseconds, while other languages may deal in seonds.
+
+There is a library of date functions called [date-fns](https://date-fns.org/)
+
+### Looping and Iterating: Filter, Find and Higher Order Functions
+
+`myArr.filter(callback)` looks over every item in the array, where the callback has a condition that results in a boolean for where to include the item in the resulting array or not.
+
+```js
+const over40 = cleanPeople.filter((person) => person.age > 40);
+
+console.table(over40);
+```
+
+`myArr.find(callback)` will only return one item from the orignal array, while `filter` will always return an array, even if it's an empty array.
+
+```js
+const students = [
+  {
+    id: "11ce",
+    first_name: "Dall",
+    last_name: "Puckring",
+  },
+  {
+    id: "2958",
+    first_name: "Margarete",
+    last_name: "Brandi",
+  },
+  {
+    id: "565a",
+    first_name: "Bendicty",
+    last_name: "Woodage",
+  },
+  {
+    id: "3a16",
+    first_name: "Micki",
+    last_name: "Mattes",
+  },
+  {
+    id: "f396",
+    first_name: "Flory",
+    last_name: "Gladeche",
+  },
+  {
+    id: "de5f",
+    first_name: "Jamill",
+    last_name: "Emilien",
+  },
+  {
+    id: "54cb",
+    first_name: "Brett",
+    last_name: "Aizikowitz",
+  },
+  {
+    id: "9135",
+    first_name: "Lorry",
+    last_name: "Smallman",
+  },
+  {
+    id: "978f",
+    first_name: "Gilly",
+    last_name: "Flott",
+  },
+];
+
+const student = students.find((s) => s.id === "565a");
+console.log(student);
+
+// higer order func
+function findById(id) {
+  return function isStudent(student) {
+    return student.id === id;
+  };
+}
+
+const student3 = students.find(findById("565a"));
+console.log(student3);
+
+// more flexible higher order func to find by any property
+function findByProp(prop, propWeAreLookingFor) {
+  return function isStudent(student) {
+    return student[prop] === propWeAreLookingFor;
+  };
+}
+
+const student4 = students.find(findByProp("id", "565a"));
+console.log(student4);
+
+const student5 = students.find(findByProp("last_name", "Flott"));
+console.log(student5);
+```
+
+### Looping and Iterating: Reduce
+
+`myArr.reduce(callback)` is one of the tricker methods, as it does so much.
+
+It takes in an array of data and returns a result or a single value.
+
+```js
+const orderTotals = [342, 1002, 523, 34, 634, 854, 1644, 2222];
+
+// add the orderTotals array
+const grandTotal = orderTotals.reduce((a, b) => a + b, 0);
+console.log(grandTotal);
+
+function tallyNumbers(tally, current) {
+  return tally + current;
+}
+
+// optional 2nd arg for where to start the tally (accumulator)
+const grandTotal2 = orderTotals.reduce(tallyNumbers, 0); // start tally at 0
+console.log(grandTotal2);
+```
+
+Reduce on objects:
+
+```js
+const inventory = [
+  { type: "shirt", price: 4000 },
+  { type: "pants", price: 4532 },
+  { type: "socks", price: 234 },
+  { type: "shirt", price: 2343 },
+  { type: "pants", price: 2343 },
+  { type: "socks", price: 542 },
+  { type: "pants", price: 123 },
+];
+
+function inventoryReducer(totals, item) {
+  //     console.log(item.type);
+  // increment the type by one
+  totals[item.type] = totals[item.type] + 1 || 1;
+  // return the total (accumulator) so the next loop can use it
+  return totals;
+}
+
+// return object
+const inventoryCounts = inventory.reduce(inventoryReducer, {});
+console.log(inventoryCounts);
+
+// return a single number
+const totalInventoryPrice = inventory.reduce(
+  (acc, item) => acc + item.price,
+  0
+);
+console.log(totalInventoryPrice);
+```
+
+### Looping and Iterating: Reduce Exercise
+
+[Regexr](https://regexr.com/) is a good site for learning and testing regex.
+
+```js
+const text = `Skip to main content
+Skip to search
+Technologies
+Change language
+Table of contents
+Array.prototype.reduce()
+The reduce() method executes a reducer function (that you provide) on each element of the array, resulting in a single output value.`;
+
+// convert to string to array, filter out special characters and map all char to lowercase, reduce to an object of the count of characters
+
+// callbacks
+function isValidChar(char) {
+  return !!char.match(/[a-z0-9]/i);
+}
+const lowercase = (char) => char.toLowerCase();
+
+function instanceCounter(counts, char) {
+  counts[char] ? counts[char]++ : (counts[char] = 1);
+  return counts;
+}
+
+// split, filter, map, reduce
+const result = text
+  .split("")
+  .filter(isValidChar)
+  .map(lowercase)
+  .reduce(instanceCounter, {});
+
+console.log(result);
+
+// sort low to high
+const sorted = Object.entries(result).sort((a, b) => a[1] - b[1]);
+console.log(sorted);
+```
+
+It is possible to do all this in one reduce function, but it's more readable to chain multiple functions filter, map,reduce functions.
+
+### Looping and Iterating: for, for in, for of and while loops
+
+for, for in, for of and while loops are not as popular as the array methods such as forEach, filter, map, reduce.
+
+`for` loop requires 3 things
+
+- initial expression
+- condition
+- increment expression
+
+```js
+for (let i = 0; i <= 10; i++) {
+  console.log(i);
+}
+
+// custom increments are handy when looping over RBGalpha values of pixels where the increment needs to be 4
+for (let i = 100; i <= 200; i += 4) {
+  console.log(i);
+}
+
+// loop over arrays
+const numbers = [2, 34, 3, 23, 42, 3, 1, 65, 364, 5, 645, 6];
+
+for (let i = 0; i < numbers.length; i++) {
+  console.log(numbers[i]);
+}
+```
+
+`for of` is faily new to JS, and is used for looping over iterables, i.e. something that has a length e.g. array or string.
+
+`for of` can loop over emojis, which a `for` cannot.
+
+The primacy use case for `for of` is to do with `promises`. If you ever have to sequence a bunch of data, meaning you have to do one thing after another in a loop, the `for of`loop will allow you to do something called `await` inside of it.
+
+```js
+const name = "Wes Bos👪🏻🎅🏻👩‍👩‍👧‍👦";
+for (const char of name) {
+  const name = "Wes Bos";
+  console.log(char);
+}
+
+// also name.split() won't work with emojis, use spread
+[...name];
+```
+
+`for in`is for looping over keys of an object, but you're likely to use `Object.entries()`, `Object.keys()` and `Object.values()`.
+
+```js
+const person = {
+  name: "wes",
+  age: 100,
+  cool: true,
+};
+
+for (prop in person) {
+  console.log(prop);
+}
+```
+
+There is one gotcha for `for in` vs. `Object.entries()`, `Object.keys()` and `Object.values()`, which has something to do with prototypes.
+
+`for in` loops through the object key and the prototype keys, whereas `Object.key()`only gives the object keys.
+
+```js
+const baseHumanStats = {
+  feet: 2,
+  arms: 2,
+  eyes: 2,
+  head: 1,
+};
+function Human(name) {
+  this.name = name;
+}
+
+Human.prototype = baseHumanStats;
+
+const wes = new Human("wes");
+
+console.log(wes);
+
+// we can reference values of the prototype
+// it first check the property on the object, if it's not there, it then checks in the prototype
+console.log(wes.feet);
+
+console.log(Object.keys(wes)); // ['name'] - only returns object keys
+
+for (prop in wes) {
+  console.log(prop); // loops through object keys and prototype keys
+}
+```
+
+`while` loop will take a condition and run infinitely until the conidtion is false.
+
+```js
+let cool = true;
+let i = 0;
+while (cool === true) {
+  console.log("you are cool");
+  i++;
+  i > 100 ? (cool = false) : null; // exit condition
+}
+```
+
+`do while` loop the `do` part will run first then check the condition after the first run, so you get at least one run of the loop. Whereas the `while`loop check the condition before running the loop, so you're not guranteed a run of the loop at all.
+
+```js
+let smart = true;
+let j = 0;
+do {
+  console.log("you are smart");
+  j++;
+  j > 99 ? (smart = false) : null; // exit condition
+} while (smart === true);
+```
+
+## Harder Practice Exercises
