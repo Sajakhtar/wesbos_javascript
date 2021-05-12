@@ -20,6 +20,7 @@
 1. [Data Types](#data-types)
 1. [Looping and Iterating](#looping-and-iterating)
 1. [Harder Practice Exercises](#harder-practice-exercises)
+1. [Prototypes, this, new and Inheritance](#prototypes-this-new-and-Inheritance)
 
 ## Chrome Dev Tools
 
@@ -2708,3 +2709,175 @@ do {
 ```
 
 ## Harder Practice Exercises
+
+### Face Detection and Censorship
+
+[see live ]()
+
+This project will access the webcam so that browser can detect a face and pixelate it.
+
+Face detection is an experimental API supported in browsers.
+
+Chrome browser supports face detection.
+
+To enable it go to `chrome://flags/#enable-experimental-web-platform-features` in chrome, enable Experimental Web Platform features, then relaunch the browser.
+
+Check the dev tools console by typing in FaceDetector.
+
+There are some advanced concepts in this project not yet covered, such as async wait, promsises and bundling tools like Parcel. We learn about Parcel in the modules section.
+
+We need to use a server to run this, as accessing a user's webcam is a security issue, you have to ask the user first for access to webcam i.e. permission based API, similar to asking for location. Permissions are tied to the origin, a.k.a domain name, which in our case will be localhost.
+
+Parcel - when we change something on the page, it will automatically refresh the page for us, after saving the changes in the text editor.
+
+We need node and npm installed. To check we have these installed, in the terminal:
+
+- `nonde -v`
+- `npm -v`
+
+In the terminal, navigate to the Face Detection exercise folder and run `npm install` to isntall all the dependancies in the `package.json` file.
+
+Run the server using `npm start` in the terminal, and then navigate to the localhost server url, which is `http://localhost:1234` in this case.
+
+You may see `DevTools`errors/ warnings in the browser console. Filter these out in the console by typing `-DevTools` in the filter box.
+
+### Sarcastic Text Generator
+
+[see live ]()
+
+Convetts input text into sarcastic, funky and 'unable' text.
+
+We cover
+
+- emitting of custom events
+- event delegation (how to listen to clicks on things that happen in the future)
+- different DOM events
+- local storage (see Dev Tools > Application tab > Local Storage > file://)
+
+### Shopping Form with Custom Events, Delegation and localstorage
+
+[see live ]()
+
+A shopping list that we can add things to, check the item off and delete it.
+
+We'll install Parcel globally so that we don't have to keep refreshing the page manually for every update to our html and JS files.
+
+In the console run `npm install -g parcel-bundler` or `sudo npm install -g parcel-bundler` in mac to install Parcel globally, so the Parcel command will be available anywhere in the terminal.
+
+Check if it is installed by running `parcel --version`in the terminal.
+
+Run `pracel index.html` in the terminal for your project folder. This will start a local server usually on `http://localhost:1234`
+
+Best practice to listen for `submit` event rather than click when it comes to forms, as form submissions can occur via mouse click and keyboard enter, so we cover all bases by listening for `submit`.
+
+Custom events are created using the `dispatchEvent()` method with a `new CustomEvent('myEvent')` constructor. It's available on all DOM elements.
+
+Local storage is like a mini database in the browser, that allows users to comeback and pick where they left off.
+
+### Build a Gallery Exercise
+
+[see live ]()
+
+Here we build the gallery in a standard way, but it will be later refactored in the prototypes section and again in the classes section.
+
+The idea is the build a gallery once and reuse the same code in multiple galleries, while keeping them separate.
+
+The problem with the current method is that the functions created are not actually shared between the different galleries, they just duplicated. This means we have double the functions that do the same thing.
+
+Using Prototypes and classes, we'll be able to share the functionality between galleries and open up the functionality to other developers.
+
+### Building a Slider
+
+[see live ]()
+
+Sliders are a common thing to create, but are often complex sucht that people opt for slider libraries.
+
+The aim here is to build the basics of a slider in a few lines of code.
+
+It will be later refactored in the prototypes section and again in the classes section.
+
+A slider is a fancy CSS `class` adder and remover.
+
+It's common to place `. js` files in a `src` or `lib` folder.
+
+This needed exercise needed an update of the `package.json`
+
+```json
+{
+  "name": "slider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0-beta.2",
+    "sass": "^1.26.10"
+  },
+  "dependencies": {
+    "parcel": "latest"
+  }
+}
+```
+
+## Prototypes, this, new and Inheritance
+
+These are the foundation for Object Oriented Programming (OOP) a.k.a Functional Programming.
+
+### The new Keyword
+
+When you create a new `Date`, an `Object`, an `Array`, a `String`, a `Number`, you are essentially creating a new object in JS, that is extended fromt the constructor for that type, which gives you access to methods. Constructors are just parent functions with child functions (methods). You can create a new instance of a constructor using the new keyword like so `new Constructor()`
+
+Dates don't have a literal syntax, which is why you need to use `new Date()` to create an instance of a new date. The other commin constructors (`String`, `Number`, `Array`, `Object`) have literal sytax.
+
+When you use the `new` keyword on a function (custom function), it creates a new instance object of that function instead of whatever has been returned from the function.
+
+```js
+new Number();
+new String();
+new Date();
+new Object();
+new Array();
+
+const myNum = new Number(100);
+myNum instanceof Number; // true
+
+const myDate = new Date("August 11, 2025");
+console.dir(myDate);
+console.log(myDate.getFullYear());
+console.log(myDate instanceof Date); // true
+console.log(myDate.constructor); // Date
+
+const names = ["wes", "jon", "jim"];
+const names2 = new Array(["wes", "jon", "jim"]);
+console.log(names instanceof Array); // true
+console.log(names2 instanceof Array); // true
+console.log(names2.constructor); // Array
+
+const person = { name: "wes", age: 30 };
+const person2 = new Object({ name: "jon", age: 30 });
+console.log(person instanceof Object); // true
+console.log(person2 instanceof Object); // true
+console.log(person2.constructor); // Object
+
+const span = document.createElement("span");
+console.log(span instanceof Node); // true
+console.log(span instanceof Element); // true
+console.log(span instanceof HTMLSpanElement); // true
+console.log(span.constructor); // HTMLSpanElement
+// this is known as extending
+
+function Pizza() {
+  console.log("Making a Pizza");
+}
+
+const pepperoniPizza = new Pizza();
+console.log(pepperoniPizza);
+console.log(pepperoniPizza instanceof Pizza); // true
+console.log(pepperoniPizza.constructor); // Pizza
+```
+
+### The this Keyword

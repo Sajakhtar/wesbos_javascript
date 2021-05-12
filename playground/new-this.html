@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>New, This, Prototypes and Classes</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+    <script>
+        // console.log('it works');
+
+        const myDate = new Date('August 11, 2025');
+        console.dir(myDate);
+        console.log(myDate.getFullYear());
+        console.log(myDate instanceof Date); // true
+        console.log(myDate.constructor); // Date
+
+        const names = ['wes', 'jon', 'jim'];
+        const names2 = new Array(['wes', 'jon', 'jim']);
+        console.log(names instanceof Array); // true
+        console.log(names2 instanceof Array); // true
+        console.log(names2.constructor); // Array
+
+        const person = { name: 'wes', age: 30 };
+        const person2 = new Object({ name: 'jon', age: 30 });
+        console.log(person instanceof Object); // true
+        console.log(person2 instanceof Object); // true
+        console.log(person2.constructor); // Object
+
+        const span = document.createElement('span');
+        console.log(span instanceof Node); // true
+        console.log(span instanceof Element); // true
+        console.log(span instanceof HTMLSpanElement); // true
+        console.log(span.constructor); // HTMLSpanElement
+        // this is known as extending
+
+        function Pizza() {
+                console.log('Making a Pizza');
+        }
+
+        const pepperoniPizza = new Pizza();
+        console.log(pepperoniPizza);
+        console.log(pepperoniPizza instanceof Pizza); // true
+        console.log(pepperoniPizza.constructor); // Pizza
+        // When you use the new keyword on a function, it creates a new instance object of that function instead of whatever has been returned from the function.
+    </script>
+</body>
+
+</html>
