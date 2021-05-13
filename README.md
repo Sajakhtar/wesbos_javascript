@@ -2881,3 +2881,243 @@ console.log(pepperoniPizza.constructor); // Pizza
 ```
 
 ### The this Keyword
+
+`this` keyword in JS refers to the instance of an object that a function is bound.
+
+In simple terms `this` is the object that is left of the dot `.`.
+
+```js
+const button1 = document.querySelector(".one");
+const button2 = document.querySelector(".two");
+
+// normal callback
+function tellMeAboutTheButton() {
+  console.log(this);
+}
+
+// 'this' is the button
+button1.addEventListener("click", tellMeAboutTheButton);
+button2.addEventListener("click", tellMeAboutTheButton);
+
+// arrow callback
+const tellMeAboutTheButton2 = () => {
+  console.log(this);
+};
+
+// 'this' is the window
+button1.addEventListener("click", tellMeAboutTheButton2);
+button2.addEventListener("click", tellMeAboutTheButton2);
+```
+
+Button one and two are instances of a html element.
+
+The callback is bound to the button. When something is bound to something, it means that the `this` keyword is equal to whatever it was bound to. We can change that with the `.bind()` method.
+
+`this` keyword is always scope to a function.
+
+`this` keyword does not change when using an arrow function, so the `this` keyword will be equal to whatever it was at the higher level outside of the arrow function. If there is no higher function around the arrow function, then `this` is equal to the window. The use case for that is
+
+```js
+function tellMeAboutTheButton3() {
+  setTimeout(function () {
+    // won't work as `this` is now the window
+    this.textContent = "You clicked me";
+  }, 1000);
+}
+
+// 'this' is the button
+button1.addEventListener("click", tellMeAboutTheButton3);
+button2.addEventListener("click", tellMeAboutTheButton3);
+
+// Solved by using Arrow function
+function tellMeAboutTheButton4() {
+  setTimeout(() => {
+    // 'this' is picked from higher level
+    this.textContent = "You clicked me";
+  }, 1000);
+}
+
+// 'this' is the button
+button1.addEventListener("click", tellMeAboutTheButton4);
+button2.addEventListener("click", tellMeAboutTheButton4);
+```
+
+`this` refers to the instance of the thing that was made.
+
+A function that makes an object is called a constructor.
+
+When you're creating a `new` instance of an object `this` keyword is used to store information about that instance.
+
+```js
+function Pizza2(toppings = [], customer) {
+  // save the topping & customer that were passed in to this instance of pizza
+  this.toppings = toppings;
+  this.customer = customer;
+  this.id = Math.floor(Math.random() * 16777215).toString(16);
+}
+
+const cheesePizza = new Pizza2(["cheese"], "wes");
+console.log(cheesePizza);
+console.log(cheesePizza instanceof Pizza2); // true
+console.log(cheesePizza.constructor); // Pizza2
+
+const hawaianPizza = new Pizza2(["pineapple", "ham"], "jon");
+console.log(hawaianPizza);
+console.log(hawaianPizza instanceof Pizza2); // true
+console.log(hawaianPizza.constructor); // Pizza2
+```
+
+### Prototypes and Prototypal Inheritance
+
+The downside to the below is that we're actually creating this function once for every single pizza that is made
+
+The .eat() are not the same i.e. we're duplicating the functionality of this function once for every single pizza.
+
+The pizza does need to have its own toppings, customer, ID, and maintain it's own slice count, but doesnt need to have it's own version of the `eat()` method - this functionality is the same for every pizza.
+
+```js
+function Pizza3(toppings = [], customer) {
+  // save the topping & customer that were passed in to this instance of pizza
+  this.toppings = toppings;
+  this.customer = customer;
+  this.id = Math.floor(Math.random() * 16777215).toString(16);
+  this.slices = 10;
+  this.eat = function () {
+    if (this.slices > 0) {
+      this.slices -= 1;
+      console.log(`chomp`, `you have ${this.slices} slices left`);
+    } else {
+      console.log(`sorry, no slices left`);
+    }
+  };
+}
+
+const margharitaPizza = new Pizza3(["cheese"], "wes");
+console.log(margharitaPizza); // eat() is an instance property
+console.log(margharitaPizza.slices);
+margharitaPizza.eat();
+console.log(margharitaPizza.slices);
+
+const vegPizza = new Pizza3(["pineapple", "onion"], "jon");
+console.log(vegPizza); // eat() is an instance property
+console.log(vegPizza.slices);
+for (let i = 0; i < 11; i++) {
+  vegPizza.eat();
+}
+console.log(vegPizza.slices);
+
+// duplicatoin of functions
+console.log(margharitaPizza === vegPizza.eat); // false
+```
+
+This problem with this is that if we have thousands of pizzas, then the duplicatoins of the eat() method takes up memory, which is what causes computers and websites to go slow in a lot of cases.
+
+So instead of putting functions as methods on every instance, we can place them as a method on the prototype, so there is only one instance of it shared amongs all the thousands of pizzas.
+
+Looking at built in prototype methods - there is only one instance of them.
+
+For example, no matter how many arrays we create, they all share the same protoype methods and so those methods are equal.
+
+```js
+const first = ["wes", "jon", "jim"];
+const nums = [1, 2, 3, 4, 5];
+
+console.log(first.filter === nums.filter); // true
+console.log(first.map === nums.map); // true
+console.log(first.reduce === nums.reduce); // true
+console.log(first.slice === nums.slice); // true
+console.log(first.splice === nums.splice); // true
+console.log(first.pop === nums.pop); // true
+console.log(first.push === nums.push); // true
+console.log(first.shift === nums.shift); // true
+console.log(first.unshift === nums.unshift); // true
+console.log(first.sort === nums.sort); // true
+console.log(first.reverse === nums.reverse); // true
+```
+
+Prototype methods are not duplicated each time we create an instance of a constructor - instead the method is shared.
+
+We need to add the method in the prototype
+
+Now there is only one `.eat()` method for every pizza created.
+
+```js
+function Pizza4(toppings = [], customer) {
+  // save the topping & customer that were passed in to this instance of pizza
+  this.toppings = toppings;
+  this.customer = customer;
+  this.id = Math.floor(Math.random() * 16777215).toString(16);
+  this.slices = 10;
+}
+
+// adding protoype method
+Pizza4.prototype.eat = function () {
+  if (this.slices > 0) {
+    this.slices -= 1;
+    console.log(`chomp`, `you have ${this.slices} slices left`);
+  } else {
+    console.log(`sorry, no slices left`);
+  }
+};
+
+Pizza4.prototype.describe = function () {
+  return `This pizza is for ${
+    this.customer
+  } with toppings: ${this.toppings.join(",")}, and ${this.slices} slices left`;
+};
+
+const veganPizza = new Pizza4(["vegan cheese"], "wes");
+console.log(veganPizza); // eat() is a prototype property
+console.log(veganPizza.slices);
+veganPizza.eat();
+console.log(veganPizza.slices);
+console.log(veganPizza.describe());
+
+const pestoPizza = new Pizza4(["pesto", "garlic"], "jon");
+console.log(pestoPizza); // eat() is a prototype property
+console.log(pestoPizza.slices);
+for (let i = 0; i < 11; i++) {
+  pestoPizza.eat();
+}
+console.log(pestoPizza.slices);
+console.log(pestoPizza.describe());
+
+console.log(veganPizza.eat === pestoPizza.eat); // true
+```
+
+The prototype lookup - if you lookup a property on an instance of an objects, and it doesnt exist on the instance, it will look for it on the Constructor prototype.
+
+The benefit of the prototype methods is that you can change the function and it will apply to every instance of that constructor.
+
+While constructors such as `new String()` have many built-in prototype methods, you can actually create your own prototype methods or overwrite existing ones - but, you should never do this.
+
+```js
+// edit existing prototype method
+String.prototype.toUpperCase = function () {
+  return "YELLING";
+};
+
+// add a prototype method
+String.prototype.sarcastic = function () {
+  const sarcastic = this.split("")
+    .map((char, i) => {
+      if (i % 2) {
+        return char.toUpperCase();
+      }
+      return char.toLowerCase();
+    })
+    .join("");
+  return sarcastic;
+};
+
+const jimbob = "jimbob";
+console.log(jimbob.sarcastic());
+```
+
+If older brwosers don't support a built-in prototype methods, such is the case of `.includes()` for Internet Explorer, then you can find pollyfill for it in vanilla JS. [Pollyfill for `.includes()` for IE8](https://stackoverflow.com/questions/53308396/how-to-polyfill-array-prototype-includes-for-ie8)
+
+### Prototype refactor of the Gallery exercise.
+
+### Prototype refactor of the slider exercise.
+
+### bind, call and apply
