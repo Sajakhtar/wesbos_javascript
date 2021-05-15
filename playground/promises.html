@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Promises</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+  <script>
+    function makePizza(toppings = []) {
+            // promise
+
+            return new Promise(function (resolve, reject) {
+                    // const pizzaPromise = new Promise(function (resolve, reject) {
+
+                    // reject if people try pineapple
+                    if (toppings.includes('pineapple')) {
+                            reject('pineapple!, seriously? Get out 🍍');
+                    }
+                    const amountOfTimeToBake = 500 + toppings.length * 200;
+
+                    // wait 1 sec for the pizza to be cooked
+                    setTimeout(function () {
+                            // resolve inside the timeout
+                            // when you are ready you can resolve this promise
+                            resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(', ')}`);
+                    }, amountOfTimeToBake);
+                    // when you are ready you can resolve this promise
+                    // resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(',')}`);
+                    // if something went wrong, we can reject this promise
+            });
+
+            // imediately return the promise
+            return pizzaPromise;
+    }
+
+    // const pizza = makePizza();
+    // console.log(pizza); // a promise with status resolved
+
+    // const pepperoniPromise = makePizza(['pepperoni']);
+    // const canadianPromise = makePizza(['pepperoni', 'mushrooms', 'onions']);
+    // console.log(pepperoniPromise, canadianPromise);
+
+    // console.log(pepperoniPromise); // promise pending
+
+    // to access the resolved value, in this case Pizza, in the promise, chain a .then callback onto it
+    // pepperoniPromise.then(function (pizza) {
+    //         console.log(pizza);
+    // });
+
+    // makePizza(['pepperoni'])
+    //         .then(function (pizza) {
+    //                 console.log(pizza);
+
+    //                 return makePizza(['ham', 'pineapple']);
+    //         })
+    //         .then(function (pizza) {
+    //                 console.log(pizza);
+
+    //                 return makePizza(['mushroon', 'onion']);
+    //         })
+    //         .then(function (pizza) {
+    //                 console.log(pizza);
+
+    //                 return makePizza(['corn', 'onion', 'olives', 'peppers', 'chillis']);
+    //         })
+    //         .then(function (pizza) {
+    //                 console.log(pizza);
+
+    //                 return makePizza([
+    //                         'one',
+    //                         'two',
+    //                         'three',
+    //                         'four',
+    //                         'one',
+    //                         'two',
+    //                         'three',
+    //                         'four',
+    //                         'one',
+    //                         'two',
+    //                         'three',
+    //                         'four',
+    //                 ]);
+    //         })
+    //         .then((pizza) => {
+    //                 console.log('All done, here is the last pizza:');
+    //                 console.log(pizza);
+    //         })
+    //         .catch(handleError);
+
+    // const pizzaPromise1 = makePizza(['mushroon', 'onion']);
+    // const pizzaPromise2 = makePizza(['corn', 'onion', 'olives', 'peppers', 'chillis']);
+    // const pizzaPromise3 = makePizza([
+    //         'one',
+    //         'two',
+    //         'three',
+    //         'four',
+    //         'one',
+    //         'two',
+    //         'three',
+    //         'four',
+    //         'one',
+    //         'two',
+    //         'three',
+    //         'four',
+    // ]);
+
+    // convert the promises into a mega promise that we can wait upon
+    // const dinnerPromise = Promise.all([pizzaPromise1, pizzaPromise2, pizzaPromise3]);
+
+    // dinnerPromise.then((pizzas) => {
+    //         console.log(pizzas); // logs all pizzas together
+    // });
+
+    // destructuring
+    // dinnerPromise.then(function (pizzas) {
+    //         const [pizza1, pizza2, pizza3] = pizzas;
+
+    //         console.log(pizza1, pizza2, pizza3);
+    // });
+
+    // dinnerPromise.then(function ([pizza1, pizza2, pizza3]) {
+    //         console.log(pizza1, pizza2, pizza3);
+    // });
+
+    // const firstPizzaPromise = Promise.race([pizzaPromise1, pizzaPromise2, pizzaPromise3]);
+
+    // firstPizzaPromise.then((pizza) => {
+    //         console.log(' here is the first pizza ready:');
+    //         console.log(pizza);
+    // });
+    
+    // .then will only happen if promise resolves successfully and the .catch will run when the promise doesn't go successfully
+
+    function handleError(err) {
+            console.log('oh no ');
+            console.log(err);
+    }
+
+    // makePizza(['ham', 'pineapple'])
+    //         .then((pizza) => {
+    //                 console.log(pizza);
+    //         })
+    //         .catch((err) => {
+    //                 console.log('oh no ');
+    //                 console.log(err);
+    //         });
+
+    // makePizza(['ham', 'pineapple'])
+    //         .then((pizza) => {
+    //                 console.log(pizza);
+    //         })
+    //         .catch(handleError);
+
+    const p1 = makePizza(['pepperoni']);
+    const p2 = makePizza(['ham', 'pineapple']);
+    const p3 = makePizza(['mushroom', 'onion']);
+
+    // make a mega promise
+    const dinnerPromise2 = Promise.allSettled([p1, p2, p3]);
+
+    dinnerPromise2.then((results) => {
+            console.log(results);
+    });
+  </script>
+</body>
+
+</html>

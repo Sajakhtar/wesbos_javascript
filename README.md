@@ -21,6 +21,7 @@
 1. [Looping and Iterating](#looping-and-iterating)
 1. [Harder Practice Exercises](#harder-practice-exercises)
 1. [Prototypes, this, new and Inheritance](#prototypes-this-new-and-Inheritance)
+1. [Advanced Flow Control](#advanced-flow-control)
 
 ## Chrome Dev Tools
 
@@ -2708,7 +2709,7 @@ do {
 } while (smart === true);
 ```
 
-## Harder Practice Exercises
+npm ## Harder Practice Exercises
 
 ### Face Detection and Censorship
 
@@ -2786,6 +2787,8 @@ The problem with the current method is that the functions created are not actual
 
 Using Prototypes and classes, we'll be able to share the functionality between galleries and open up the functionality to other developers.
 
+Run `parcel index.html` in the terminal for your project folder. This will start a local server usually on `http://localhost:1234`
+
 ### Building a Slider
 
 [see live ]()
@@ -2814,7 +2817,6 @@ This needed exercise needed an update of the `package.json`
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0-beta.2",
     "sass": "^1.26.10"
   },
   "dependencies": {
@@ -2822,6 +2824,8 @@ This needed exercise needed an update of the `package.json`
   }
 }
 ```
+
+use `npm start` in the project folder in the terminal to run the server.
 
 ## Prototypes, this, new and Inheritance
 
@@ -3116,8 +3120,903 @@ console.log(jimbob.sarcastic());
 
 If older brwosers don't support a built-in prototype methods, such is the case of `.includes()` for Internet Explorer, then you can find pollyfill for it in vanilla JS. [Pollyfill for `.includes()` for IE8](https://stackoverflow.com/questions/53308396/how-to-polyfill-array-prototype-includes-for-ie8)
 
-### Prototype refactor of the Gallery exercise.
-
-### Prototype refactor of the slider exercise.
-
 ### bind, call and apply
+
+`bind`, `call` and `apply` are three functions used to change the scope of `this` inside of a function or method.
+
+Though these are not used very often, the came up alot in interview questions.
+
+`this` keyword is always defined by where the function is being called, not where the function is being defined.
+
+In the example below, even though we define the `sayHi()` function in the `person` object, it's not bound to it unless we call it as a method of an object.
+
+```js
+const person = {
+  name: "jon snow",
+  sayHi() {
+    console.log(this); // this is window, as there was nothing the method was bound to on the left side
+    console.log(`Hey ${this.name}`);
+    return `Hey ${this.name}`;
+  },
+};
+console.log(person.sayHi()); // 'Hey jon snow'
+
+const { sayHi } = person;
+console.log(sayHi()); // 'Hey '
+// sayHi method is bound to the window, so cannot access person.name yet.
+```
+
+We can use the `bind` keyword to change what the `this` keyword is bound to.
+
+```js
+const sayHi2 = person.sayHi.bind(person);
+console.log(sayHi2()); // 'Hey jon snow'
+```
+
+What this says is create a function called `sayHi()` that when called it's `this` will be equal to whatever I pass into the `bind` method.
+
+The use case for this is that sometimes you want to use a method of an object wiht some other information.
+
+```js
+const jim = { name: "jim bob" };
+const sayHi3 = person.sayHi.bind(jim);
+console.log(sayHi3()); // 'Hey jib bob'
+
+const sayHi4 = person.sayHi.bind({ name: "john doe" });
+console.log(sayHi4()); // 'Hey john doe'
+```
+
+Example with makeing `document.querySelector` into shortform:
+
+```js
+let $ = document.querySelector;
+console.log($);
+console.log($ === document.querySelector); // true
+
+// select wrapper
+const wrapper = document.querySelector(".wrapper"); // this is bound to document
+const p = wrapper.querySelector("p"); // this is bound to wrapper element
+console.log(p);
+
+// We can't do the same thing with $ variable, even though $ = document.querySelector, we've taken away the object to which the method was called against, and so this is not bound to anything (defaults to being bound to window)
+
+$ = document.querySelector.bind(document); // when calling against querySelector set 'this' to be the document. We're essentially returning a new function
+console.log($(".wrapper")); // it works
+console.log($ === document.querySelector); // FALSE
+```
+
+Using `bind` will change the context of what `this` is equal to inside a function or method.
+
+Another use case for `bind` is that you can use it to prep that has arguments preloaded. We can pass `bind` additional arguements that line up with the arguments of the function or method. The first argument in `bind()` will always be the `this` object, and the additional arguments will line up with arguements that get passed into the function.
+
+Sometimes when you're generating functions, say you're looping over a list of data, you have access to that data at the time of function creation and may be later you want to call it. Sometimes it's easier to pass the function what the arguments will be at call time, when you are binding it. Then you can take that function whereever you want, knowing that the arguments are pre-installed on it and so you can call it whenever you want.
+
+```js
+const bill = {
+  total: 1000,
+  calculate(taxRate) {
+    return this.total + this.total * taxRate;
+  },
+};
+
+const total = bill.calculate(0.13);
+console.log(total); // 1130
+
+const calc = bill.calculate;
+console.log(calc(0.13)); // NaN as 'this' is bound to window
+
+const calc2 = bill.calculate.bind(bill);
+console.log(calc2(0.13)); // 1130
+
+// preload taxRate args into 'bind'
+const calc3 = bill.calculate.bind({ total: 500 }, 0.1);
+console.log(calc3()); // 550
+```
+
+`call` and `apply` work exactly the same way `bind` does, except they will call the functions for you. Instead of returning a function like `bind` does, which you then have to run later, `call` invoke the function immediately.
+
+`apply` also immediately invokes the function, but you have to pass the additional arguments in as an array.
+
+```js
+// call
+const total2 = bill.calculate.call({ total: 500 }, 0.1);
+console.log(total2); // 550
+
+// apply
+const total3 = bill.calculate.apply({ total: 500 }, [0.1]); // additional arg as an array
+console.log(total3); // 550
+```
+
+```js
+const bill = {
+  total: 1000,
+  calculate(taxRate) {
+    return this.total + this.total * taxRate;
+  },
+  describe(mealType, drinkType, taxRate) {
+    console.log(
+      `your meal of ${mealType}with a drink of ${drinkType} was ${this.calculate(
+        taxRate
+      )}`
+    );
+  },
+};
+
+// call
+const desc1 = bill.describe.call(bill, "steak", "coke", 0.1);
+console.log(desc1); // your meal of steakwith a drink of coke was 1100
+
+// apply
+const desc2 = bill.describe.apply(bill, ["steak", "coke", 0.1]);
+console.log(desc2); // your meal of steakwith a drink of coke was 1100
+```
+
+### Prototype Refactor of the Gallery Exercise
+
+[See Live]()
+
+Refactoring gallery exercise using prototypes so that Gallery 1 and 2 share the methods across gallery object, rather than have their own instances.
+
+Run `parcel index.html` in the terminal for your project folder. This will start a local server usually on `http://localhost:1234`
+
+### Prototype Refactor of the Slider Exercise
+
+[See Live]()
+
+Refactoring slider exercise using prototypes so that each instance of the Slider shares the methods across the slider object, rather than having an instances of their own slider methods.
+
+This needed exercise needed an update of the `package.json`
+
+```json
+{
+  "name": "slider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.26.10"
+  },
+  "dependencies": {
+    "parcel": "latest"
+  }
+}
+```
+
+use `npm start` in the project folder in the terminal to run the server.
+
+## Advanced Flow Control
+
+### The Event Loop and Callback Hell
+
+Before getting into Promises, we need to look at how JS is asynchronous (non-blocking) and how the event loop works.
+
+JS is a single thread language, which means that only one thing can be run at a time. Some languages are multi-threaded, which means multiple processes can be run at once.
+
+The call stack and the event loop is complext to understand, but Philip Roberts has a [talk](https://www.youtube.com/watch?v=8aGhZQkoFbQ) on this on Youtube and has a tool called [Loupe](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D) that helps us visualize the call stack.
+
+When you click something, the call stack gives a trail of what functions were called up until that, but the call stack can only run one function at a time.
+
+```js
+console.log("starting");
+setTimeout(function () {
+  console.log("running");
+}, 3000);
+console.log("ending");
+```
+
+The console log `starting`, then `ending`, then `running`. JS is asynchronous meaning that it will put the setTimeout into the Web Apis, then when it comes back after 3seconds, it'll stick it in the callback queue.
+
+- The call stack is that JS is doing
+- The Web APIs are things that are waiting or things that we are listening for (event handlers), then when something happens in the Web Apis it'll stick it in the callback queue.
+- The call stack reaches into the callbakc queue, when it has nothing left to do
+
+This means that even if the setTimout was 0 seconds, the callback functions still gets added to the Web Apis and then the callback queue, so the console log will still be `starting`, then `ending`, then `running`.
+
+How do we deal with things that take time, i.e. that does need to wait for a network request to come back?
+
+Below is callback hell for a simple animation with nested callback dependent on the pior callback. This is also refered to as christmas tree code.
+
+The solution to callback hell is Promises, an IOU, that allow us to write that's much easier to read, much flatter.
+
+```js
+const go = document.querySelector(".go");
+
+// change test to go when clicked
+go.addEventListener("click", function (e) {
+  const el = e.currentTarget;
+  // console.log(el);
+
+  el.textContent = "Go";
+
+  // make it a circle after 2 secs
+  setTimeout(function () {
+    el.classList.add("circle");
+
+    // make it red after 0.5s
+    setTimeout(function () {
+      el.classList.add("red");
+
+      // make it square after 0.25s
+      setTimeout(function () {
+        el.classList.remove("circle");
+
+        // make it purple after 0.3s
+        setTimeout(function () {
+          el.classList.remove("red");
+          el.classList.add("purple");
+
+          // fade out after 0.5s
+          setTimeout(function () {
+            el.classList.add("fadeOut");
+          }, 500);
+        }, 300);
+      }, 250);
+    }, 500);
+  }, 2000);
+});
+```
+
+### Promises
+
+A promise is an IOU for something that will happen in the future.
+
+When we set a timeout or wait for data to be returned from an API, or someone giving us access to the webcam/ microphone - when we request these, we don't get the immediate data back but a promise.
+
+Promises are made immediately but don't resolve until they are ready.
+
+A `Promise` takes a callback function with 2 arguments.
+
+- resolve
+- reject
+
+```js
+function makePizza() {
+  // promise
+
+  const pizzaPromise = new Promise(function (resolve, reject) {
+    // when you are ready you can resolve this promise
+    resolve("🍕");
+    // if something went wrong, we can reject this promise
+  });
+  return pizzaPromise;
+}
+
+const pizza = makePizza();
+console.log(pizza); // a promise with status resolved
+```
+
+What's import here is that the function doesnt give us the Pizza, it gives us a promise of Pizza.
+
+```js
+function makePizza(toppings) {
+  // promise
+
+  const pizzaPromise = new Promise(function (resolve, reject) {
+    // wait 1 sec for the pizza to be cooked
+    setTimeout(function () {
+      // resolve inside the timeout
+      // when you are ready you can resolve this promise
+      resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(",")}`);
+    }, 1000);
+
+    // if something went wrong, we can reject this promise
+  });
+
+  // imediately return the promise
+  return pizzaPromise;
+}
+
+// run function to return a promise of pizza
+const pepperoniPromise = makePizza(["pepperoni"]);
+
+console.log(pepperoniPromise); // promise pending
+
+// to access the resolved value, in this case Pizza, in the promise, chain a .then callback onto it
+pepperoniPromise.then(function (pizza) {
+  console.log(pizza);
+});
+```
+
+The logic of how the promise get's resolved is always inside the promise body.
+
+To access the resolved value, in the promise, chain a .then callback on to it.
+
+We can chain using `.then` to conintue to return a new promise and resolve it.
+
+```js
+function makePizza(toppings = []) {
+  // promise
+
+  return new Promise(function (resolve, reject) {
+    const amountOfTimeToBake = 500 + toppings.length * 200;
+
+    // wait 1 sec for the pizza to be cooked
+    setTimeout(function () {
+      // resolve inside the timeout
+      // when you are ready you can resolve this promise
+      resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(", ")}`);
+    }, amountOfTimeToBake);
+
+    // if something went wrong, we can reject this promise
+  });
+
+  // imediately return the promise
+  return pizzaPromise;
+}
+
+makePizza(["pepperoni"])
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza(["ham", "pineapple"]);
+  })
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza(["mushroon", "onion"]);
+  })
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza(["corn", "onion", "olives", "peppers", "chillis"]);
+  })
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza([
+      "one",
+      "two",
+      "three",
+      "four",
+      "one",
+      "two",
+      "three",
+      "four",
+      "one",
+      "two",
+      "three",
+      "four",
+    ]);
+  })
+  .then((pizza) => {
+    console.log("All done, here is the last pizza:");
+    console.log(pizza);
+  });
+```
+
+Running the promises concurrently rather than sequentially, but sing `Promise.all()`. This will only resolve once all the promises contained within are resolved.
+
+```js
+const pizzaPromise1 = makePizza(["mushroon", "onion"]);
+const pizzaPromise2 = makePizza([
+  "corn",
+  "onion",
+  "olives",
+  "peppers",
+  "chillis",
+]);
+const pizzaPromise3 = makePizza([
+  "one",
+  "two",
+  "three",
+  "four",
+  "one",
+  "two",
+  "three",
+  "four",
+  "one",
+  "two",
+  "three",
+  "four",
+]);
+
+// convert the promises into a mega promise that we can wait upon
+const dinnerPromise = Promise.all([
+  pizzaPromise1,
+  pizzaPromise2,
+  pizzaPromise3,
+]);
+
+dinnerPromise.then((pizzas) => {
+  console.log(pizzas); // logs all pizzas together
+});
+```
+
+Or with destructuring
+
+```js
+dinnerPromise.then(function (pizzas) {
+  const [pizza1, pizza2, pizza3] = pizzas;
+
+  console.log(pizza1, pizza2, pizza3);
+});
+```
+
+or destructuring with less code
+
+```js
+dinnerPromise.then(function ([pizza1, pizza2, pizza3]) {
+  console.log(pizza1, pizza2, pizza3);
+});
+```
+
+`Promise.race` will resolve the first promise to finish rendering.
+
+```js
+const firstPizzaPromise = Promise.race([
+  pizzaPromise1,
+  pizzaPromise2,
+  pizzaPromise3,
+]);
+
+firstPizzaPromise.then((pizza) => {
+  console.log(" here is the first pizza ready:");
+  console.log(pizza);
+});
+```
+
+### Error Handling
+
+The opposite of resolving a promise is rejecting it.
+
+The way to handle an error in a promise is to chain a `.catch` after the `.then`.
+
+Almost always we should chain a `.then` and `.catch` on a promsise function call.
+
+If you have multiple promsises chained together, not every single promise needs a catch on the end, you just need to put one `.catch` at the end that'll handle the error.
+
+```js
+function makePizza(toppings = []) {
+  // promise
+
+  return new Promise(function (resolve, reject) {
+    // reject if people try pineapple
+    if (toppings.includes("pineapple")) {
+      reject("pineapple!, seriously? Get out 🍍");
+    }
+    const amountOfTimeToBake = 500 + toppings.length * 200;
+
+    // wait 1 sec for the pizza to be cooked
+    setTimeout(function () {
+      // resolve inside the timeout
+      resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(", ")}`);
+    }, amountOfTimeToBake);
+  });
+
+  // imediately return the promise
+  return pizzaPromise;
+}
+
+// .then will only happen if promise resolves successfully and the .catch will run when the promise doesn't go successfully
+makePizza(["ham", "pineapple"])
+  .then((pizza) => {
+    console.log(pizza);
+  })
+  .catch((err) => {
+    console.log("oh no ");
+    console.log(err);
+  });
+```
+
+Or pass in a handleError callback:
+
+```js
+function handleError(err) {
+  console.log("oh no ");
+  console.log(err);
+}
+
+makePizza(["ham", "pineapple"])
+  .then((pizza) => {
+    console.log(pizza);
+  })
+  .catch(handleError);
+```
+
+We just needs one `catch()` to handle the error for multiple promises chained together.
+
+```js
+makePizza(["pepperoni"])
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza(["ham", "pineapple"]);
+  })
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza(["mushroon", "onion"]);
+  })
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza(["corn", "onion", "olives", "peppers", "chillis"]);
+  })
+  .then(function (pizza) {
+    console.log(pizza);
+
+    return makePizza([
+      "one",
+      "two",
+      "three",
+      "four",
+      "one",
+      "two",
+      "three",
+      "four",
+      "one",
+      "two",
+      "three",
+      "four",
+    ]);
+  })
+  .then((pizza) => {
+    console.log("All done, here is the last pizza:");
+    console.log(pizza);
+  })
+  .catch(handleError);
+```
+
+But the thing about and error happening in a promise chain, wherever the error happens it'll then bail out of the rest of the promise chain.
+
+If the promises are not dependent on each other, then you shouldn't use a promise chain, isntead use `Promise.allSettled()`.
+
+`Promise.allSettled()` will show all the promises that were fullfilled (resolved) and rejected.
+
+You could use `Promise.all()` or `Promise.race()`, but would have to chain a `.catch()` to handle the error.
+
+`Promise.allSettled()` will tell you when all promises are done regardless of whether they were resolved or rejected.
+
+```js
+const p1 = makePizza(["pepperoni"]);
+const p2 = makePizza(["ham", "pineapple"]);
+const p3 = makePizza(["mushroom", "onion"]);
+
+const dinnerPromise2 = Promise.allSettled([p1, p2, p3]);
+
+dinnerPromise2.then((results) => {
+  console.log(results);
+});
+```
+
+### Refactoring Callback Hell to Promise Land
+
+We create wait helper functions so that our code is Dry-er
+
+Then we take the nested callback functions and make it one level deep.
+
+Even though this is one level deep, this is still callback hel, but Async will fix this.
+
+```js
+// wait function with a promise
+const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function animate(e) {
+  const el = e.currentTarget;
+
+  el.textContent = "Go";
+
+  // make it a circle after 2 secs
+  // make it red after 0.5s
+  // make it square after 0.25s
+  // make it purple after 0.3s
+  // fade out after 0.5s
+  wait(2000)
+    .then(() => {
+      el.classList.add("circle");
+      return wait(500);
+    })
+    .then(() => {
+      el.classList.add("red");
+      return wait(250);
+    })
+    .then(() => {
+      el.classList.remove("circle");
+      return wait(300);
+    })
+    .then(() => {
+      el.classList.remove("red");
+      el.classList.add("purple");
+      return wait(500);
+    })
+    .then(() => {
+      el.classList.add("fadeOut");
+    });
+}
+
+go.addEventListener("click", animate);
+```
+
+### Async Await
+
+Async is a new syntax that will allow us to use the keywords `aysnc` and `await` for a much nicer and easier to read code.
+
+There's nothing that needs to change in the `Promise` generating functions, it's all in where we actually call the function where `aysnc awaits` comes in handy.
+
+You can only use `aysnc awaits` that is marked as `async`.
+
+Place `await` infront of a `Promise` based function, and the function will temporaily pause until that promise is resolved (fullfilled/ rejected).
+
+`await` is only valid in `async` functions.
+
+This saves us having to chain `.then()`.
+
+```js
+// wait function with a promise
+const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// async function
+async function go() {
+  console.log("starting");
+  await wait(2000);
+  console.log("running");
+  await wait(2000);
+  console.log("ending");
+}
+```
+
+You can mark any type of function with `async`.
+
+```js
+// function declarations
+async function df() {}
+
+// arrow functions
+const arrowFn = async () => {};
+
+// callback functions
+window.addEventListener("click", async function () {});
+
+// methods
+const myObject = {
+  sayHi: async function () {}, // method
+  async sayHello() {}, // mehod shorthand
+  sayHay: async () => {}, // function property
+};
+```
+
+You cannot do top level await in a JS file. but it does work in the browser console, and it may be added to node.js.
+
+This will work the cconsole and is called top level await, but wont' work in a JS file unless it's inside of an `async` function.
+
+```js
+console.log("starting");
+await wait(2000);
+console.log("ending");
+```
+
+```js
+function makePizza(toppings = []) {
+  // promise
+  return new Promise(function (resolve, reject) {
+    // reject if people try pineapple
+    if (toppings.includes("pineapple")) {
+      reject("pineapple!, seriously? Get out 🍍");
+    }
+    const amountOfTimeToBake = 500 + toppings.length * 200;
+
+    // wait 1 sec for the pizza to be cooked
+    setTimeout(function () {
+      resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(", ")}`);
+    }, amountOfTimeToBake);
+  });
+
+  // imediately return the promise
+  return pizzaPromise;
+}
+
+// async await pizzas
+async function makeDinner() {
+  const p1 = await makePizza(["pepperoni"]);
+  console.log(p1);
+
+  const p2 = await makePizza(["mushroom"]);
+  console.log(p2);
+}
+
+makeDinner();
+```
+
+More efficient/ performant to make things concurrent
+
+```js
+async function makeDinner() {
+  const pizzaPromise1 = makePizza(["pepperoni"]);
+  const pizzaPromise2 = makePizza(["mushroom"]);
+
+  // create a parent promsie and await that, concurrency is better for performance
+  const pizzas = await Promise.all([pizzaPromise1, pizzaPromise2]);
+  console.log(pizzas);
+}
+
+makeDinner();
+```
+
+or destructure
+
+```js
+async function makeDinner() {
+  // create a parent promise and await that, concurrency is better for performance
+  const pizzaPromise1 = makePizza(["pepperoni"]);
+  const pizzaPromise2 = makePizza(["mushroom"]);
+
+  const [pep, mush] = await Promise.all([pizzaPromise1, pizzaPromise2]);
+  console.log(pep, mush);
+}
+
+makeDinner();
+```
+
+Refactoring animation with `async await`.
+
+```js
+const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const go = document.querySelector(".go");
+
+async function animate2(e) {
+  const el = e.currentTarget;
+
+  el.textContent = "Go";
+
+  // make it a circle after 2 secs
+  // make it red after 0.5s
+  // make it square after 0.25s
+  // make it purple after 0.3s
+  // fade out after 0.5s
+  await wait(2000);
+  el.classList.add("circle");
+  await wait(500);
+  el.classList.add("red");
+  await wait(250);
+  el.classList.remove("circle");
+  await wait(300);
+  el.classList.remove("red");
+  el.classList.add("purple");
+  await wait(500);
+  el.classList.add("fadeOut");
+}
+
+go.addEventListener("click", animate2);
+```
+
+### Async Await Error Handling
+
+Since we're no longer chaining `.then`, the error handling is not as simple as chaining a `.catch at the end.
+
+There are 4 different ways to do error handling in `async await`.
+
+- 1: try-catch
+
+  - this is a safety blanked
+  - downside is that it messess with the simplicity of `async await`
+
+- 2: mix & match when defining the function
+
+  - `async await` with Promise syntax for error handling
+  - helpful if you want to handle the error at the time that you define the function
+  - use case may be to diplay a modal/ popup or prompt for the user
+
+- 3: mix & match when calling the function
+
+  - sometimes you want to handle the error when you call the function
+  - when you mark a function as `async` it will immediately return a `promise` to you, (without `async` it's a regular function), so we can chain the `.then` and `.catch` syntax on `async` functions if we want
+  - this is the best of both world and one that is used most often
+
+- 4: Higher Order function HOF
+  - i.e. a function that returns another function
+  - write all your functions as if you never to have any errors
+  - then when it comes time to calling the function, you have 2 options
+    - catch it at run time (method 3 of error handling as bove)
+    - make a safe function with a high order function (HOF)
+      - you only have to make this once and run it whenever your want, knowing that the error handler will be attached
+      - i.e. it is more DRY
+      - typically used in Node.js and Express projects i.e. have just one safe function for all pages that display information
+
+```js
+const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function makePizza(toppings = []) {
+  // promise
+  return new Promise(function (resolve, reject) {
+    // reject if people try pineapple
+    if (toppings.includes("pineapple")) {
+      reject("pineapple!, seriously? Get out 🍍");
+    }
+    const amountOfTimeToBake = 500 + toppings.length * 200;
+
+    // wait 1 sec for the pizza to be cooked
+    setTimeout(function () {
+      resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(", ")}`);
+    }, amountOfTimeToBake);
+  });
+
+  // imediately return the promise
+  return pizzaPromise;
+}
+
+// 4 ways to handle errors
+// 1. Try-catch
+async function go() {
+  try {
+    const pizza = await makePizza(["pineapple"]);
+    console.log(pizza);
+  } catch (err) {
+    console.log("oh no");
+    console.log(err);
+  }
+}
+
+go();
+```
+
+```js
+// 2. Mix & Match - async await with Promise syntax for error handling
+function handleError(err) {
+  console.log("oh no");
+  console.log(err);
+}
+
+async function go() {
+  const pizza = await makePizza(["pineapple"]).catch(handleError);
+  console.log(pizza);
+}
+
+go();
+```
+
+```js
+// 3. mix & match when calling the function - async await with Promise syntax for error handling
+function handleError(err) {
+  console.log("oh no");
+  console.log(err);
+}
+
+async function go() {
+  const pizza = await makePizza(["pineapple"]);
+  console.log(pizza);
+  return pizza; // returns a promise
+}
+
+const result = go().catch(handleError);
+console.log(result); // a promise
+
+// or
+go()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch(handleError);
+```
+
+```js
+// 4. Higher Order function (HOF)
+function handleError(err) {
+  console.log("oh no");
+  console.log(err);
+}
+
+async function go() {
+  const pizza = await makePizza(["pineapple"]);
+  console.log(pizza);
+  return pizza; // returns a promise
+}
+
+function makeSafe(fn, errorHandler) {
+  return function () {
+    fn().catch(errorHandler);
+  };
+}
+
+const safeGo = makeSafe(go, handleError);
+safeGo();
+```
+
+### Async Await Prompt UI
+
+### Async Typer UI - two ways

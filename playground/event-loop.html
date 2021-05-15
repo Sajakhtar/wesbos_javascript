@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Event Loop</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+    <style>
+        .go {
+            margin: 5rem;
+            background: white;
+            padding: 5rem;
+            width: 25rem;
+            height: 25rem;
+            transition: all 0.2s;
+        }
+
+        .go.circle {
+            border-radius: 50%;
+        }
+
+        .go.red {
+            background: red;
+        }
+
+        .go.purple {
+            background: purple;
+            color: white;
+        }
+
+        .go.fadeOut {
+            opacity: 0;
+        }
+    </style>
+
+    <div class="go">Click Me</div>
+
+    <script>
+        // console.log('starting');
+        // setTimeout(function () {
+        //         console.log('running');
+        // }, 3000);
+        // console.log('ending');
+        // starting > ending > running
+
+        const go = document.querySelector('.go');
+        
+        // change test to go when clicked
+        go.addEventListener('click', function (e) {
+                const el = e.currentTarget;
+                // console.log(el);
+
+                el.textContent = 'Go';
+
+                // make it a circle after 2 secs
+                setTimeout(function () {
+                        el.classList.add('circle');
+
+                        // make it red after 0.5s
+                        setTimeout(function () {
+                                el.classList.add('red');
+
+                                // make it square after 0.25s
+                                setTimeout(function () {
+                                        el.classList.remove('circle');
+        
+                                        // make it purple after 0.3s
+                                        setTimeout(function () {
+                                                el.classList.remove('red');
+                                                el.classList.add('purple');
+
+                                                // fade out after 0.5s
+                                                setTimeout(function () {
+                                                        el.classList.add('fadeOut');
+                                                }, 500);
+                                        }, 300);
+                                }, 250);
+                        }, 500);
+                }, 2000);
+        });
+    </script>
+    </body>
+
+</html>

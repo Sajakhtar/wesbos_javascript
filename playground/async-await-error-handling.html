@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Async Await Error Handling</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+  <script>
+    // wait function with a promise
+    // function wait(ms = 0) {
+    //         return new Promise((resolve) => {
+    //                 setTimeout(resolve, ms);
+    //         });
+    // }
+
+    const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function makePizza(toppings = []) {
+            // promise
+            return new Promise(function (resolve, reject) {
+                    // reject if people try pineapple
+                    if (toppings.includes('pineapple')) {
+                            reject('pineapple!, seriously? Get out 🍍');
+                    }
+                    const amountOfTimeToBake = 500 + toppings.length * 200;
+
+                    // wait 1 sec for the pizza to be cooked
+                    setTimeout(function () {
+                            resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(', ')}`);
+                    }, amountOfTimeToBake);
+            });
+
+            // imediately return the promise
+            return pizzaPromise;
+    }
+
+    // 4 ways to handle errors
+
+    // 1. Try-catch
+    // async function go() {
+    
+    //         try {
+    //                 const pizza = await makePizza(['pineapple']);
+    //                 console.log(pizza);
+    //         } catch (err) {
+    //                 console.log('oh no');
+    //                 console.log(err);
+    //         }
+    // }
+
+    // 2. mix & match when defining the function - async await with Promise syntax for error handling
+    // function handleError(err) {
+    //         console.log('oh no');
+    //         console.log(err);
+    // }
+
+    // async function go() {
+    //         const pizza = await makePizza(['pineapple']).catch(handleError);
+    //         console.log(pizza);
+    // }
+
+    // go();
+
+    // 3. mix & match when calling the function - async await with Promise syntax for error handling
+    // function handleError(err) {
+    //         console.log('oh no');
+    //         console.log(err);
+    // }
+
+    // async function go() {
+    //         const pizza = await makePizza(['pineapple']);
+    //         console.log(pizza);
+    //         return pizza; // returns a promise
+    // }
+
+    // const result = go().catch(handleError);
+    // console.log(result); // a promise
+
+    // or
+    // go()
+    //         .then((result) => {
+    //                 console.log(result);
+    //         })
+    //         .catch(handleError);
+
+    // 4. Higher Order function (HOF)
+    function handleError(err) {
+            console.log('oh no');
+            console.log(err);
+    }
+
+    async function go() {
+            const pizza = await makePizza(['pineapple']);
+            console.log(pizza);
+            return pizza; // returns a promise
+    }
+
+    function makeSafe(fn, errorHandler) {
+            return function () {
+                    fn().catch(errorHandler);
+            };
+    }
+
+    const safeGo = makeSafe(go, handleError);
+    safeGo();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bind, call and apply</title>
+    <link rel="stylesheet" href="../base.css" />
+    
+</head>
+<body>
+    <p>hey</p>
+    <button>click me</button>
+
+    <div class="wrapper">
+        <p>I'm a wrapper</p>
+    </div>
+
+    <script>
+        const person = {
+                name: 'jon snow',
+                sayHi() {
+                        console.log(this); // this is window, as there was nothing the method was bound to on the left side
+                        console.log(`Hey ${this.name}`);
+                        return `Hey ${this.name}`;
+                },
+        };
+        console.log(person.sayHi()); // 'Hey jon snow'
+
+        const { sayHi } = person;
+        console.log(sayHi()); // 'Hey '
+
+        const sayHi2 = person.sayHi.bind(person);
+        console.log(sayHi2()); // 'Hey jon snow'
+
+        const jim = { name: 'jim bob' };
+        const sayHi3 = person.sayHi.bind(jim);
+        console.log(sayHi3()); // 'Hey jib bob'
+
+        const sayHi4 = person.sayHi.bind({ name: 'john doe' });
+        console.log(sayHi4()); // 'Hey john doe'
+
+        // querySelector example - making it short form
+
+        console.clear();
+
+        let $ = document.querySelector;
+        console.log($);
+        console.log($ === document.querySelector); // true
+
+        // select wrapper
+        const wrapper = document.querySelector('.wrapper'); // this is bound to document
+        const p = wrapper.querySelector('p'); // this is bound to wrapper element
+        console.log(p);
+
+        // We can't do the same thing with $ variable, even though $ = document.querySelector, we've taken away the object to which the method was called against, and so this is not bound to anything (defaults to being bound to window)
+        
+        $ = document.querySelector.bind(document); // when calling against querySelector set 'this' to be the document. We're essentially returning a new function
+        console.log($('.wrapper')); // it works
+        console.log($ === document.querySelector); // FALSE
+
+        // function with args preloaded
+
+        const bill = {
+                total: 1000,
+                calculate(taxRate) {
+                        return this.total + this.total * taxRate;
+                },
+                describe(mealType, drinkType, taxRate) {
+                        console.log(`your meal of ${mealType}with a drink of ${drinkType} was ${this.calculate(taxRate)}`);
+                },
+        };
+
+        const total = bill.calculate(0.13);
+        console.log(total); // 1130
+
+        const calc = bill.calculate;
+        console.log(calc(0.13)); // NaN as 'this' is bound to window
+
+        const calc2 = bill.calculate.bind(bill);
+        console.log(calc2(0.13)); // 1130
+
+        // preload taxRate args into 'bind'
+        const calc3 = bill.calculate.bind({ total: 500 }, 0.1);
+        console.log(calc3()); // 550
+
+        // call
+        const total2 = bill.calculate.call({ total: 500 }, 0.1);
+        console.log(total2); // 550
+
+        // apply
+        const total3 = bill.calculate.apply({ total: 500 }, [0.1]);
+        console.log(total3); // 550
+
+        const desc1 = bill.describe.call(bill, 'steak', 'coke', 0.1);
+        console.log(desc1); // your meal of steakwith a drink of coke was 1100
+
+        const desc2 = bill.describe.apply(bill, ['steak', 'coke', 0.1]);
+        console.log(desc2); // your meal of steakwith a drink of coke was 1100
+    </script>
+    
+</body>
+</html>

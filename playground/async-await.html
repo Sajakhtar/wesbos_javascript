@@ -1,0 +1,93 @@
+  
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Async Await</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+  <script>
+      // wait function with a promise
+      const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      async function go() {
+              console.log('starting');
+              await wait(2000); // await pauses function until promsise function resolved
+              console.log('running');
+              await wait(2000);
+              console.log('ending');
+      }
+
+//   go();
+
+      // async for any function
+
+      // function declarations
+//   async function df() {}
+
+      // arrow functions
+//   const arrowFn = async () => {};
+
+      // callback functions
+//   window.addEventListener('click', async function () {});
+
+      // methods
+//   const person = {
+//           async sayHi() {}, // method
+//           async sayHello() {}, // mehod shorthand
+//           sayHay: async () => {}, // function property
+//   };
+
+      /**
+       * Pizza function from promises.html
+       * */
+
+      function makePizza(toppings = []) {
+              // promise
+              return new Promise(function (resolve, reject) {
+                      // reject if people try pineapple
+                      if (toppings.includes('pineapple')) {
+                              reject('pineapple!, seriously? Get out 🍍');
+                      }
+                      const amountOfTimeToBake = 500 + toppings.length * 200;
+
+                      // wait 1 sec for the pizza to be cooked
+                      setTimeout(function () {
+                              resolve(`Here is your pizza 🍕 with the toppings ${toppings.join(', ')}`);
+                      }, amountOfTimeToBake);
+              });
+
+              // imediately return the promise
+              return pizzaPromise;
+      }
+
+      // async await pizzas
+      async function makeDinner() {
+              //   const p1 = await makePizza(['pepperoni']);
+              //   console.log(p1);
+
+              //   const p2 = await makePizza(['mushroom']);
+              //   console.log(p2);
+      
+              // create a parent promise and await that, concurrency is better for performance
+              const pizzaPromise1 = makePizza(['pepperoni']);
+              const pizzaPromise2 = makePizza(['mushroom']);
+
+              //   const pizzas = await Promise.all([pizzaPromise1, pizzaPromise2]);
+              //   console.log(pizzas);
+
+              const [pep, mush] = await Promise.all([pizzaPromise1, pizzaPromise2]);
+              console.log(pep, mush);
+      }
+
+      makeDinner();
+    </script>
+</body>
+
+</html>
+
+
