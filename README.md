@@ -22,6 +22,9 @@
 1. [Harder Practice Exercises](#harder-practice-exercises)
 1. [Prototypes, this, new and Inheritance](#prototypes-this-new-and-Inheritance)
 1. [Advanced Flow Control](#advanced-flow-control)
+1. [Ajax and Fetching Data](#ajax-and-fetching-data)
+1. [ES Modules and Structuring Larger Apps](#es-modules-and-structuring-larger-apps)
+1. [Final Round of Exercises](#final-round-of-exercises)
 
 ## Chrome Dev Tools
 
@@ -4019,4 +4022,27 @@ safeGo();
 
 ### Async Await Prompt UI
 
+[See Live]()
+
+It's coommon to build a prompt interface to ask the user for something, when a user clicks a button or when something happens on page, then fetch that data back and display it on the page somehow.
+
+The problem with native browser prompts is that you can only have one input box and it blocks you from doing anything else on the page- what if you want multiple inputs and images - here we can use promises and async await.
+
+Note that we use a `For Of` loop as it allows you to pause the loop as you `await` something inside of it. `forEach` doesnt allow this.
+
 ### Async Typer UI - two ways
+
+[See Live]()
+
+In this exercise we make text appear on page as if it is being typed.
+
+This is done using 2 methods
+
+- async await with for-of loop
+- async await with recursion
+
+## Ajax and Fetching Data
+
+## ES Modules and Structuring Larger Apps
+
+## Final Round of Exercises
