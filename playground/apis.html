@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>APIs</title>
+  <link rel="stylesheet" href="../base.css">
+</head>
+
+<body>
+    <p class="user"></p>
+    <script>
+        function handleError(err) {
+                console.log('oh no');
+                console.log(err);
+                userEl.textContent = `Something went wrong: ${err}`;
+        }
+
+        // const user1 = 'sajakhtar';
+        // const user2 = 'wesbos';
+        // const endpoint = `https://api.github.com/users/${user1}`;
+
+        // const userEl = document.querySelector('.user');
+        // userEl.textContent = 'loading...';
+
+        // const apiPromise = fetch(endpoint);
+        //   console.log(apiPromise);
+
+        // log the api response
+        // apiPromise
+        //         .then(
+        //                 (response) =>
+        //                         //   console.log(response);
+        //                         response.json() // returns a promise
+        //         )
+        //         .then((data) => {
+        //                 console.log(data); // automatically formatted as an object
+        //                 console.log(data.login);
+        //                 console.log(data.name);
+        //                 console.log(data.location);
+        //                 userEl.textContent = `${data.name} - ${data.url}`;
+        //         })
+        //         .catch(handleError);
+
+        // refactor
+        const user1 = 'sajakhtar';
+        const user2 = 'wesbos';
+        const baseEndpoint = `https://api.github.com`;
+        const usersEndpoint = `${baseEndpoint}/users`;
+        const userEl = document.querySelector('.user');
+
+        async function displayUser(username) {
+                userEl.textContent = 'loading...';
+
+                const response = await fetch(`${usersEndpoint}/${username}`);
+                const data = await response.json();
+                userEl.textContent = `${data.name} - ${data.url}`;
+        }
+
+        displayUser('sajakhtar').catch(handleError);
+    </script>
+</body>
+
+</html>

@@ -4043,6 +4043,113 @@ This is done using 2 methods
 
 ## Ajax and Fetching Data
 
+A use case for `aysnc await` and `Promises` is fetching data from an API.
+
+API = application programming interface i.e. a standardized procedure for talking to a machine. A client (browser, mobile app) needs to talk to a server somewhere to pull/ push data and surface functionality.
+
+An API is just a URL that you can hit with some associated data and that API will respond with some JSON.
+
+JSON = javsscript object notation i.e. a way to transport JS objects from server to client or server to server in a string format.
+
+Conver JSON to JS Object
+
+```js
+JSON.parse(myJson);
+```
+
+Conver object to JSON
+
+```js
+JSON.stringify(myObj);
+```
+
+Github API
+
+- https://api.github.com/users/sajakhtar
+- https://api.github.com/users/wesbos
+
+Good to have a JSON viewer browser extention.
+
+AJAX = Asynchronous JavaScript and Xml.
+
+Xml is another way you can receive data and it look like HTML i.e. markup language. It's unlikely we will run into Xml nowadays.
+
+When people say AJAX, they mean fecthing data from an API and displaying it on the page.
+
+An endpoint is a fancy word for the API URL from which you get the data.
+
+In order to get the data we use a library either `fetch()` which is a part of the browser, or others like `AXIOS`.
+
+`fetch()` returns a promise.
+
+The browser dev tools Network tab will show all the API requests.
+
+Publics API listed on [Github](https://github.com/public-apis/public-apis).
+
+```js
+function handleError(err) {
+  console.log('oh no');
+  console.log(err);
+  userEl.textContent = `Something went wrong: ${err}`;
+}
+
+const user1 = 'sajakhtar';
+const user2 = 'wesbos';
+const endpoint = `https://api.github.com/users/${user1}`;
+
+const userEl = document.querySelector('.user');
+userEl.textContent = 'loading...';
+
+const apiPromise = fetch(endpoint);
+console.log(apiPromise);
+
+log the api response
+apiPromise
+  .then(
+          (response) =>
+                  //   console.log(response);
+                  response.json() // returns a promise
+  )
+  .then((data) => {
+          console.log(data); // automatically formatted as an object
+          console.log(data.login);
+          console.log(data.name);
+          console.log(data.location);
+          userEl.textContent = `${data.name} - ${data.url}`;
+  })
+  .catch(handleError);
+```
+
+Refactored:
+
+```js
+function handleError(err) {
+  console.log("oh no");
+  console.log(err);
+  userEl.textContent = `Something went wrong: ${err}`;
+}
+
+const user1 = "sajakhtar";
+const user2 = "wesbos";
+const baseEndpoint = `https://api.github.com`;
+const usersEndpoint = `${baseEndpoint}/users`;
+const userEl = document.querySelector(".user");
+
+async function displayUser(username) {
+  userEl.textContent = "loading...";
+
+  const response = await fetch(`${usersEndpoint}/${username}`);
+  const data = await response.json();
+  userEl.textContent = `${data.name} - ${data.url}`;
+}
+
+displayUser("sajakhtar").catch(handleError);
+```
+
+```js
+
+```
+
 ## ES Modules and Structuring Larger Apps
 
 ## Final Round of Exercises
