@@ -4043,6 +4043,8 @@ This is done using 2 methods
 
 ## Ajax and Fetching Data
 
+### Ajax and APIs
+
 A use case for `aysnc await` and `Promises` is fetching data from an API.
 
 API = application programming interface i.e. a standardized procedure for talking to a machine. A client (browser, mobile app) needs to talk to a server somewhere to pull/ push data and surface functionality.
@@ -4146,9 +4148,104 @@ async function displayUser(username) {
 displayUser("sajakhtar").catch(handleError);
 ```
 
-```js
+### CORS and Recipes
 
+[See Live]()
+
+Using [recipepuppy.com](http://www.recipepuppy.com/about/api) API, we'll look at the typical hurdles we will hit when working with APIs.
+
+Example output from recipe puppy API:
+http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3
+
+- i = ingredients
+- q = search query
+- p = page
+
+The browser will block the request because of something call CORS: Access to the API will be blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+CORS = cross origin resource sharing.
+
+Origins are domain names and by default you're not allowed to share data between domain names.
+
+The API domain has to implement a CORS policy that happens on the server, stating which domain names are allowed to transfer data to one another.
+
+For us to use CORS, we need an origin. THe origin is `null` if we're calling the index.html file path in the browser, so we need to run it from a localhost server via Parcel.
+
+First `npm init` the project folder, then `npm install parcel-bundler`.
+
+`package.json` will look like this:
+
+```json
+{
+  "name": "dogrecipes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts.js",
+  "scripts": {
+    "start": "parcel index.html" // UPDATE SCRIPTS SECTION TO THIS
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
 ```
+
+Run the server using `npm start` to open up localhost server, usually http://localhost:1234/.
+
+Now we get `regeneratorRuntime` error in the console - this is to do with Babel. Babel takes the JS with things like `async await` and backticks, things that are new to JS, and transpile the JS from modern JS to JS that can run on all browsers.
+
+`async await` has been available in all browsers for a few years, so we need to tell Babel not to transpile, so we update `package.json` with a browsers list i.e. a list of browsers that our app is supporting.
+
+```json
+{
+  "name": "dogrecipes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "parcel-bundler": "^1.12.5"
+  },
+  "browserslist": ["last 1 chrome versions"] // ADD THIS
+}
+```
+
+Often deleting `cache` and `dist` folders can fix errors, as sometimes settings get stuck in there.
+
+The next problem we face is to do with CORS again:
+`Access to fetch at 'http://www.recipepuppy.com/api/?q=pizza' from origin 'http://localhost:1234' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.`
+
+It's likely that recipepuppy.com has not implemented a CORS policy. So recipepuppy.com API would work if you were accessing it from anything other than a browser, e.g. a mobile app or backend language: Node.js, Ruby on Rails, PHP.
+
+We need to put a proxy in between our localhost server and recipepuppy.com API. In this case it'll be a CORS proxy.
+
+We will use [CORS Anywhere](https://github.com/Rob--W/cors-anywhere)
+
+First request temporary access to the [demo server](https://cors-anywhere.herokuapp.com/corsdemo)
+
+We should now have access to the CORS Anywhere proxy: `https://cors-anywhere.herokuapp.com/`.
+
+- Then test it on the [demo site](https://robwu.nl/cors-anywhere.html) with `http://www.recipepuppy.com/api/?q=pizza`.
+
+We then paste the CORS Anywhere proxy URL `https://cors-anywhere.herokuapp.com/` in front of our endpoint, so that it will proxy the data for us.
+
+To be clear, we are sending data througha random web server controlled by who knows, so don't use a CORS proxy for sensitive data. In that case, it's better to run your own proxy server.
+
+
+
+### Dad Jokes
+
+[See Live]()
+
+### Currency Converter
+
+[See Live]()
 
 ## ES Modules and Structuring Larger Apps
 
