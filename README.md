@@ -4255,7 +4255,7 @@ A header is additional information with an API request. You also get headers whe
 
 Fetch takes a second argument object for the headers: `fetch(endpoint, {headers: {}})`.
 
-We also implement a CSS loader from [Pur CSS Loaders](https://loading.io/css/).
+We also implement a CSS loader from [Pure CSS Loaders](https://loading.io/css/).
 
 ### Currency Converter
 
@@ -4270,6 +4270,207 @@ This project includes fetching data and caching data.
 ## ES Modules and Structuring Larger Apps
 
 ### Modules
+
+Modules are way to structure your JS, share data and functionality across multiple files or projects.
+
+Modules have their own scope.
+
+Modules can hold anything - functionality e.g. utility functions, data, config,
+
+Modules are also know as ECMAScript Modules, ES6 Modules.
+
+Before Modules were possible, you would load all the JS files in their own `<script src="..."></script>`tags, and they would need to be in the correct order, if they are dependent on one another - this could get out of hand.
+
+Typically the order of loading JS in `index.html` would be:
+
+- jQuery
+- jQuery libraries
+- util functions
+- scripts1
+- scripts2
+- scriptsN
+
+This is known as loading in a waterfall.
+
+Developers could have 30 scripts tags for all their various JS files.
+
+The solution to this is Modules, whereby you if you need a function, you can import it from another file (module) that contains the function. Here you no longer need to worry about JS files loading before one another and dependancies.
+
+In your `index.html` you generally have one `<script src="./scripts.js" type="module"></script>` which will be the entry point for all your JS. The script tag will have an attribute `type="module"`.
+
+You can't use modules unless you're running it on a server, else you face the CORS issue.
+
+We'll use a VS Code plugin called Live Server. You can right click on a `index.html` and select `Open with Live Server`. This will open a localhost server on port 5500 usually, `http://127.0.0.1:5500`.
+
+Another local server is via installing browser-sync
+
+- `npm install -g browser-sync`
+- then in the project folder, in the terminal, run `browser-sync`
+
+VS Code's Live Server is the simplest.
+
+You can fetch a function from a file by importing it.
+
+There are 2 types of imports
+
+- named imports
+- default imports
+
+Before you can import something, it needs to be export from the module (file) it is in.
+
+Export a function by adding `export` infront of it:
+
+```js
+export function returnHi(name) {
+  return `hi ${name}`;
+}
+```
+
+Import a function by specifying the function and the file path to import from:
+
+```js
+// named import
+import { returnHi } from "./utils.js";
+
+const name = "wes";
+
+console.log(returnHi(name));
+```
+
+Always do the imports at the top of the file that your are in.
+
+Modules have their own scope. This means that you can use variables inside a module and they will not leak out.
+
+You can export variables from modules (files) to make them available to other modules (files);
+
+```js
+export const last = "bos";
+
+export function returnHi(name) {
+  return `hi ${name}`;
+}
+```
+
+```js
+// named imports
+import { returnHi, last } from "./utils.js";
+
+const name = "wes";
+
+console.log(returnHi(name));
+
+console.log(last);
+```
+
+Another way to export is at the bottom of the module (file), called named exports:
+
+```js
+export const last = "bos";
+const middle = "bob";
+const title = "Dr";
+
+export function returnHi(name) {
+  return `hi ${name}`;
+}
+
+// Named Exports
+export { middle, title };
+```
+
+A module can have as many named exports as we like, but a module can have one default export. Default exports can only be named exports at the end of the module.
+
+When importing a default export, we can name it anything we want, since there is only one default export per module (file).
+
+Default export:
+
+```js
+const person = {
+  name: "wes",
+  last: "bos",
+};
+
+export default person;
+```
+
+importing a default export
+
+```js
+import nameMeAnything from "./wes.js";
+
+console.log(nameMeAnything); // works
+```
+
+If the module does only one thing, then use a default export.
+
+If the module have multiple functions e.g. a utility library, then named exports are the way to go.
+
+```js
+// rename imports
+import { returnHi as sayHi, last, middle, title } from "./utils.js";
+
+const name = "wes";
+
+console.log(sayHi(name));
+```
+
+Import everything
+
+```js
+// some named exports
+export const dog = "snickers";
+export const food = "pizza";
+export function eat() {
+  console.log("nom nom");
+}
+```
+
+```js
+// import everything
+import * as everything from "./wes.js";
+
+console.log(everything); // like an object
+console.log(everything.dog);
+console.log(everything.food);
+console.log(everything.eat());
+```
+
+On demand imports - to import things only when you need them
+
+```js
+// Normal import
+import currencies from "./currencies.js";
+
+export function handleButtonClick(e) {
+  // console.log(e);
+  console.log(currencies);
+}
+```
+
+```js
+// On demand import
+export async function handleButtonClick(e) {
+  // destructuring - 'default' is a reserved keyword so we have to rename it
+  const { localCurrency, default: currency } = await import("./currencies.js");
+  console.log(localCurrency);
+  console.log(currency);
+}
+```
+
+```js
+import { handleButtonClick } from "./handlers.js";
+
+const button = document.querySelector("button");
+
+button.addEventListener("click".handleButtonClick);
+```
+
+Mozilla docs on [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) syntax.
+
+---
+
+VIDEO stopped at 20:48
+
+---
 
 ### Currency Modules Refactor
 
