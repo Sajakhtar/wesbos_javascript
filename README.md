@@ -4237,16 +4237,52 @@ We then paste the CORS Anywhere proxy URL `https://cors-anywhere.herokuapp.com/`
 
 To be clear, we are sending data througha random web server controlled by who knows, so don't use a CORS proxy for sensitive data. In that case, it's better to run your own proxy server.
 
-
-
 ### Dad Jokes
 
 [See Live]()
+
+Another Ajax example, this time using the [icanhazdadjoke.com API](https://icanhazdadjoke.com/api) to fetch a random joke and display on page.
+
+It'll require custom headers, which is something new to learn versus the provious Recipes project.
+
+Accepted Accept headers:
+
+- text/html - HTML response (default response format)
+- application/json - JSON response
+- text/plain - Plain text response
+
+A header is additional information with an API request. You also get headers when data is returned.
+
+Fetch takes a second argument object for the headers: `fetch(endpoint, {headers: {}})`.
+
+We also implement a CSS loader from [Pur CSS Loaders](https://loading.io/css/).
 
 ### Currency Converter
 
 [See Live]()
 
+A currency conversion app using the [exchangeratesapi.io](https://exchangeratesapi.io/) API. The API requires sign-up for an API key, though note that the base currency is EUR by default.
+
+We'll base this project on [free.currencyconverterapi.com](https://free.currencyconverterapi.com/) API instead. The code has been adapted to how this API returns the data, which differs to exchangeratesapi.io API, but works fine all the same.
+
+This project includes fetching data and caching data.
+
 ## ES Modules and Structuring Larger Apps
 
+### Modules
+
+### Currency Modules Refactor
+
+### Dad Jokes Modules Refactor
+
+### Bundling and Building with Parcel
+
+### Using open source npm packages
+
+### Security
+
 ## Final Round of Exercises
+
+### Web Speech Colours Game
+
+### Audio Visualization
