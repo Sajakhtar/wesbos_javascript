@@ -4474,9 +4474,83 @@ VIDEO stopped at 20:48
 
 ### Currency Modules Refactor
 
+[See Live]()
+
+Refactoring all the JS into the following modules
+
+- `money.js` referebced ub `index.html` as gateway/ entry point to all the JS
+  - add `type="module"`to the script tag in `index.html`
+  - `<script src="./money.js" type="module"></script>`
+- `init.js` initialization functions called by money.js
+- `currencies.js` for the currency array variable as a default export
+- `elements.js` for all the DOM element variables
+- `handlers.js` for form input event handler
+- `lib.js` for the functions specific to this app i.e. convert and fetchRate
+- `utils.js` for generic functions that could be reused in other apps, such as generateOptions and formatCurrency
+
 ### Dad Jokes Modules Refactor
 
+[See Live]()
+
+Refactoring all the JS into the following modules
+
+- `jokes.js` referebced ub `index.html` as gateway/ entry point to all the JS
+  - add `type="module"`to the script tag in `index.html`
+  - `<script src="./jokes.js" type="module"></script>`
+- `./data/.js` for
+- `buttonText.js` for the array the we use to randmonize the button textContent
+- `./lib/index.js` for core application functions, i.e. fetchJoke,
+- `./lib/utils.js` or generic functions that could be reused in other apps, such as randomItemFromArray
+- `./lib/handlers.js` for form button event handler
+- `/lib/elements.js` for all the DOM element variables
+
 ### Bundling and Building with Parcel
+
+The idea with modules is that you can ship the single script tag `<script src="./scripts.js" type="module"></script>` in the `index.html` to the browser, uploading the entire project.
+
+However, given the volumne of JS files, we may need a bundler on top of the modules to make your applicaiton as small and performant as possible.
+
+A bundler allows you to compress/ minify all of your code, including dead code elimiatation, image compression etc..
+
+Bable will transpile your code to older JS syntax to support older browsers.
+
+A bundler can support SASS, LESS or other CSS things like auto-prefixer.
+
+Generaly a bundler libarary will include a bunlder and a dev server - we've use Parcel for their dev server.
+
+Bundlers
+
+- [Webpack](https://webpack.js.org/) - the biggest, but complicated
+- [Rollup](https://rollupjs.org/guide/en/)
+- [Parcel](https://parceljs.org/)
+- [Babel](https://babeljs.io/) - Wes Favorite
+- [Pika](https://www.pika.dev/) - a relatively new bunlder
+
+**Parcel**
+
+Bundling Dad Jokes Modules Refactor.
+
+Make a copy of the `base.css` in the project folder and update the refrence to it in `index.html`
+
+In the terminal, navigate to project folder, and run `npm init` to create a `package.json` file for the project. Then install Parcel as a dev dependanacy to the project itself by running `npm install parcel-bundler --save-dev`. A dev dependency is not needed for the application to run, but are needed as tooling in order for someone to work on the application.
+
+In order to run Parcel, you can run `parcel index.html`, but that uses the global installation of Parcel, rather than the local project specific installation.
+
+In order to run Parcel downloaded for the project, update the `package.json` `scripts` section with `"start": "parcel index.html"` so that we can run it as an `npm start` which in turn runs Parcel.
+
+We'll get the error in the console of `regeneratorRuntime is not defined` because we're using `async await` in our JS. The workaround is to add `"browserslist": [ "last 1 chrome versions"]` to `package.json` file.
+
+Any problems with Parcel, delete the `dist` and `cache` folder from the project and rerun `npm start`.
+
+When you want to build a compiled version of your app, you add another script to `package.json`: `"build": "parcel build index.html"` under `scripts`, then in terminal run `npm run build` - this will compress the html and JS files as much as possible with new files in the `dist` folder.
+
+Parcel may require you to delete `type="module"` from the `index.html` script tag. Try that if Parcel causes problems.
+
+The parcel build command is something that we're going to be re-running everytime we change our application.
+
+Parcel is the best default bunlder and easiest for beginners, requires little fuss beyond the `package.json` file.
+
+`create-react-app` or `create-next-app` or `create-gatsby` use Webpack under the hood.
 
 ### Using open source npm packages
 

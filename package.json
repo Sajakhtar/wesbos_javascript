@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Sajakhtar/wesbos_javascript#readme",
   "devDependencies": {
     "babel-eslint": "^10.1.0",
+    "cssnano": "^5.0.2",
     "eslint": "^7.8.1",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
@@ -28,6 +29,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.2",
+    "postcss": "^8.2.15",
     "prettier": "^2.1.1"
   }
 }
