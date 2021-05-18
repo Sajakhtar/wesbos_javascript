@@ -4554,6 +4554,53 @@ Parcel is the best default bunlder and easiest for beginners, requires little fu
 
 ### Using open source npm packages
 
+Most things that you want to do has probably already been done by someone else, where they're battle tested and they're fast. This means you can always reach for a utility library or a whole framework (React, Vue) to do what you want.
+
+[Node Package Manger (NPM)](https://www.npmjs.com/) has all the JS modules.
+
+`npm init` the project folder.
+
+Install packages
+
+- `npm i parcel-bundler -D` or `npm install parcel-bundler --save-dev`
+- Install multiple packages at the same time
+
+  - `npm i faker date-fns await-to-js lodash axios`
+
+    - [faker](https://www.npmjs.com/package/faker) - Generate massive amounts of fake contextual data e.g. fake names, emails credicards for testing purposes
+    - [date-fns](https://date-fns.org/) - date utility library, https://date-fns.org/
+      - easy way to format dates, compare dates etc...
+    - [Y
+      ](https://www.npmjs.com/package/await-to-js) - Async await wrapper for easy error handling
+    - [lodash](https://lodash.com/) - a utility library for working with array, objects, etc...
+      - in most cases you can get away witha map, filter or reduce
+      - but there is use case if the map, filter or reduce is too difficult, to then use the lodash equivalent
+      - e.g. cloneDeep, where you can specify how many levels deep to clone an object or array
+      - or isEqual performs a deep comparison between the values inside objects
+      - spend some time learning about lodash functions to get it in your headspace for when you will face object and array challenges in the future
+    - [axios](https://www.npmjs.com/package/axios) - library to work with APIs, similar `fetch()`
+      - it has nice defaults
+      - doesn't have double awaits that our promises do because of the JSON default
+      - works on NodeJS which `fetch()` doesnt unless you pollyfill it
+      - many plugins for axios for caching
+
+  - `npm i waait`, which is Wes Bos wait function
+    Packages have their own dependencies, which will also be installed, and this is why the `node_modules` has so many files. Never modify what's inside `node_modules`, though you can delete it then run `npm install` in your project folder to get it back.
+
+Update the `package.json` `scripts` section with `"start": "parcel index.html"` so that we can run it as an `npm start` which in turn runs Parcel.
+
+Add `"browserslist": [ "last 1 chrome versions"]` to `package.json` file.
+
+Note syntax
+
+```js
+// ECMAScript Modules syntax
+import faker from "faker";
+
+// Common JS syntax (Old NodeJS syntax)
+var faker = require("faker");
+```
+
 ### Security
 
 ## Final Round of Exercises
