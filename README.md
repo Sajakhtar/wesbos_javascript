@@ -4570,8 +4570,7 @@ Install packages
     - [faker](https://www.npmjs.com/package/faker) - Generate massive amounts of fake contextual data e.g. fake names, emails credicards for testing purposes
     - [date-fns](https://date-fns.org/) - date utility library, https://date-fns.org/
       - easy way to format dates, compare dates etc...
-    - [Y
-      ](https://www.npmjs.com/package/await-to-js) - Async await wrapper for easy error handling
+    - [await-to-js](https://www.npmjs.com/package/await-to-js) - Async await wrapper for easy error handling
     - [lodash](https://lodash.com/) - a utility library for working with array, objects, etc...
       - in most cases you can get away witha map, filter or reduce
       - but there is use case if the map, filter or reduce is too difficult, to then use the lodash equivalent
