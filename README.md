@@ -4690,6 +4690,17 @@ Whe send data via `POST` over insecure origin `HTTP`, malicious actors could pee
 
 [See Live]()
 
+In this exercise we make use of the speech recognition API in Chrome. Turn on by navigatin in the browser to `about:flags` and ensure `Experimental Web Platform Features` is Enabled.
+
+- `window.webkitSpeechRecoginition`
+
+Set up a server. In project folder
+
+- `npm init`
+- `npm install parcel-bundler --save-dev`
+- update `package.json` `scripts` with: ` "start": "parcel index.html"`
+- add `"browserslist": ["last 1 chrome versions"]` `package.json`
+
 ### Audio Visualization
 
 [See Live]()
