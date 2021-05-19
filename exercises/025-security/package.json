@@ -1,0 +1,17 @@
+{
+  "name": "clientsecurity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nasty.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dompurify": "^2.2.8"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}

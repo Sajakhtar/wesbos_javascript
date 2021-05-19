@@ -4530,6 +4530,8 @@ Bundlers
 
 Bundling Dad Jokes Modules Refactor.
 
+[See Live]()
+
 Make a copy of the `base.css` in the project folder and update the refrence to it in `index.html`
 
 In the terminal, navigate to project folder, and run `npm init` to create a `package.json` file for the project. Then install Parcel as a dev dependanacy to the project itself by running `npm install parcel-bundler --save-dev`. A dev dependency is not needed for the application to run, but are needed as tooling in order for someone to work on the application.
@@ -4602,8 +4604,92 @@ var faker = require("faker");
 
 ### Security
 
+Much of security comes from running JS or other languages on the server-side.
+
+- encryption
+- certificates
+- firewalls
+- whitelisted IPs
+- rate limiting
+
+However, there are some security measures to take in the front-end.
+
+JS is totally public via the browser Dev Tools, which means anything you put in the source code is not safe, so don't put sensitive information on the client side JS.
+
+Generally when it's not ok to put API keys in the brower, the API will restrict you via CORS.
+
+Some APIs are allowed in the client side , such APIs keys are allowed in the client as API supplier will limit the requests per domain or visitor. Links to Private down
+
+- Google Maps API key
+
+Dangerous scenarios where malicous actors can modify the JS
+
+- links to private downloads
+- prices set on client side, before proceeding with the transaction always check the price from the serverside
+
+**Rule**: Any time you are taking in data from a user and embedding it into HTML e.g.`innerHTML` (`textContent` is fine), you must first sanitize it. Otherwise, someone could inject style tags and make website `display: none` or worse is inject JS script tag or more likely img tag `onload` or `onerror` attributes.
+
+- `<img src="https://source.unsplash.com/200x200" alt="Nice"> onload="alert('hacked')">`
+
+That's how people do Cross-site Scripting, i.e. they find a way to remotely run JS on someone's page. Almost always they'll hookup an image tag with malicious JS inside the `onload` or `onerror` attributes.
+
+There is a very easy way to sanitize user inputs from which you create html. There is a library [dompurify](https://www.npmjs.com/package/dompurify) - it will take in a string and scrub it for any malicious code or security issues.
+
+In project folder
+
+- `npm init`
+- `npm install parcel-bundler --save-dev`
+- `npm install dompurify`
+- update `package.json` `scripts` with: ` "start": "parcel index.html"`
+
+Then we can clean the inputs using the `sanitize()` function along with options for `FORBID_ATTR` and `FORBID_TAGS`.
+
+```js
+import { sanitize } from "dompurify";
+
+const input = document.querySelector('[name="input"]');
+const output = document.querySelector(".output");
+const buttons = document.querySelectorAll("nav button");
+
+input.addEventListener("input", () => {
+  const clean = sanitize(input.value, {
+    FORBID_ATTR: ["width", "height", "style"],
+    FORBID_TAGS: ["style"],
+  });
+
+  // unsanitized
+  // output.innerHTML = input.value.replace(/\n/g, '<br>');
+
+  // sanitized
+  output.innerHTML = clean.replace(/\n/g, "<br>");
+});
+
+// trigger an input even on page load
+input.dispatchEvent(new Event("input"));
+
+buttons.forEach((button) =>
+  button.addEventListener("click", (e) => {
+    alert(e.currentTarget.textContent);
+  })
+);
+```
+
+[See Live]()
+
+When sending data, always make sure you're sending it to a `HTTPS` origin (domain).
+
+When you `GET` from an insecure origin `HTTP`, malicious actors could peer into the data you're fetching.
+
+Whe send data via `POST` over insecure origin `HTTP`, malicious actors could peer into the data you're sending and possibly modify it.
+
+`HTTPS` ensure the data you `GET` or `POST` will be encrypted.
+
 ## Final Round of Exercises
 
 ### Web Speech Colours Game
 
+[See Live]()
+
 ### Audio Visualization
+
+[See Live]()
