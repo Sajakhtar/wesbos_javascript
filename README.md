@@ -4704,3 +4704,17 @@ Set up a server. In project folder
 ### Audio Visualization
 
 [See Live]()
+
+In this exercise we use the web browser audio API, to create a audio visualizer with frequency at the bottom of the page and an oscilloscope in the middle.
+
+Set up a server. In project folder
+
+- `npm init`
+- `npm install parcel-bundler --save-dev`
+- update `package.json` `scripts` with: ` "start": "parcel index.html"`
+- add `"browserslist": ["last 1 chrome versions"]` `package.json`
+
+HSL (hue, saturation, lightness) is used to color the frequency bars.
+Reference:
+
+- [mothereffinghsl.com HSL Colors website](https://mothereffinghsl.com/)
