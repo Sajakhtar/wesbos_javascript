@@ -1109,7 +1109,7 @@ photo.addEventListener("keyup", handlePhotoClick); // listen for Enter keyup
 
 ### Etch-A-Sketch
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/004-etch-a-sketch/)
 
 Etch-A-Sketch game that allows you to draw on a white board on screen using mouse movements, and shake button to reset the board.
 
@@ -1123,7 +1123,7 @@ See `exercises/004-etch-a-sketch/`
 
 ### Click Outside Modal
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/005-click-outside/)
 
 This example shows how to close a modal popup once a user presses the escape key or clicks outside of the popup.
 
@@ -1131,7 +1131,7 @@ Checking to see if the user has clicked outside an element, which is tough to do
 
 ### Scroll Events and Intersection Observer
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/006-scroll-to-accept/)
 
 Use case is T&Cs scroll to accept within an element on page or popup. here we want to display the accept button only when the user scrolls to the bottom of the terms.
 
@@ -1151,7 +1151,7 @@ We can use the `intersectionRatio` to tell is if we've scroll all the way to the
 
 ### Tabs
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/007-tabs/)
 
 This exercise demonstrates clickable tabs to hide and show content. The tabs will be accessible via the keyboard tab key as well, using aria labels in the html tab elements. This is proper markup that is good for accessibility and SEO crawler readability.
 
@@ -2716,7 +2716,7 @@ npm ## Harder Practice Exercises
 
 ### Face Detection and Censorship
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/009-face-detection-censorship/face.html)
 
 This project will access the webcam so that browser can detect a face and pixelate it.
 
@@ -2747,7 +2747,7 @@ You may see `DevTools`errors/ warnings in the browser console. Filter these out 
 
 ### Sarcastic Text Generator
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/010-sarcastic-text/)
 
 Convetts input text into sarcastic, funky and 'unable' text.
 
@@ -2760,7 +2760,7 @@ We cover
 
 ### Shopping Form with Custom Events, Delegation and localstorage
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/011-shopping-list/)
 
 A shopping list that we can add things to, check the item off and delete it.
 
@@ -2780,7 +2780,7 @@ Local storage is like a mini database in the browser, that allows users to comeb
 
 ### Build a Gallery Exercise
 
-[see live ]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/012-gallery/)
 
 Here we build the gallery in a standard way, but it will be later refactored in the prototypes section and again in the classes section.
 
@@ -2794,9 +2794,9 @@ Run `parcel index.html` in the terminal for your project folder. This will start
 
 ### Building a Slider
 
-[see live ]()
+NOTE: cannot see live on Github Page due SCSS - it's only support on Pages via Jekyll.
 
-Sliders are a common thing to create, but are often complex sucht that people opt for slider libraries.
+Sliders are a common thing to create, but are often complex such that people opt for slider libraries.
 
 The aim here is to build the basics of a slider in a few lines of code.
 
@@ -3256,7 +3256,7 @@ console.log(desc2); // your meal of steakwith a drink of coke was 1100
 
 ### Prototype Refactor of the Gallery Exercise
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/014-gallery-prototype/)
 
 Refactoring gallery exercise using prototypes so that Gallery 1 and 2 share the methods across gallery object, rather than have their own instances.
 
@@ -3264,7 +3264,7 @@ Run `parcel index.html` in the terminal for your project folder. This will start
 
 ### Prototype Refactor of the Slider Exercise
 
-[See Live]()
+NOTE: cannot see live on Github Page due SCSS - it's only support on Pages via Jekyll.
 
 Refactoring slider exercise using prototypes so that each instance of the Slider shares the methods across the slider object, rather than having an instances of their own slider methods.
 
@@ -4022,7 +4022,7 @@ safeGo();
 
 ### Async Await Prompt UI
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/016-async-prompts/)
 
 It's coommon to build a prompt interface to ask the user for something, when a user clicks a button or when something happens on page, then fetch that data back and display it on the page somehow.
 
@@ -4032,7 +4032,7 @@ Note that we use a `For Of` loop as it allows you to pause the loop as you `awai
 
 ### Async Typer UI - two ways
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/017-async-typer/)
 
 In this exercise we make text appear on page as if it is being typed.
 
@@ -4150,7 +4150,7 @@ displayUser("sajakhtar").catch(handleError);
 
 ### CORS and Recipes
 
-[See Live]()
+NOTE: Cannot see live on Github pages due to CORS issue: `scripts.js:10 GET https://cors-anywhere.herokuapp.com/http://www.recipepuppy.com/api/?q=pizza 403 (Forbidden)`.
 
 Using [recipepuppy.com](http://www.recipepuppy.com/about/api) API, we'll look at the typical hurdles we will hit when working with APIs.
 
@@ -4239,7 +4239,7 @@ To be clear, we are sending data througha random web server controlled by who kn
 
 ### Dad Jokes
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/019-dad-jokes/)
 
 Another Ajax example, this time using the [icanhazdadjoke.com API](https://icanhazdadjoke.com/api) to fetch a random joke and display on page.
 
@@ -4259,7 +4259,7 @@ We also implement a CSS loader from [Pure CSS Loaders](https://loading.io/css/).
 
 ### Currency Converter
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/020-currency-converter/)
 
 A currency conversion app using the [exchangeratesapi.io](https://exchangeratesapi.io/) API. The API requires sign-up for an API key, though note that the base currency is EUR by default.
 
@@ -4474,7 +4474,7 @@ VIDEO stopped at 20:48
 
 ### Currency Modules Refactor
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/021-currency-converter-modules-refactor/)
 
 Refactoring all the JS into the following modules
 
@@ -4490,7 +4490,7 @@ Refactoring all the JS into the following modules
 
 ### Dad Jokes Modules Refactor
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/022-dad-jokes-modules-refactor/)
 
 Refactoring all the JS into the following modules
 
@@ -4530,7 +4530,7 @@ Bundlers
 
 Bundling Dad Jokes Modules Refactor.
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/023-dad-jokes-modules-bundling-parcel/)
 
 Make a copy of the `base.css` in the project folder and update the refrence to it in `index.html`
 
@@ -4600,6 +4600,150 @@ import faker from "faker";
 
 // Common JS syntax (Old NodeJS syntax)
 var faker = require("faker");
+```
+
+Examples of NPM Modules usage:
+
+```js
+// console.log('it works');
+
+import wait from "waait";
+// import faker from "faker";
+import { name } from "faker";
+import { formatDistance, format } from "date-fns";
+import axios from "axios";
+import { intersection, cloneDeep, isEqual, repeat } from "lodash";
+import { to } from "await-to-js";
+
+// console.log(`Hello ${faker.name.firstName()}`);
+console.log(`Hello ${name.firstName()}`);
+
+/**
+ * FAKER
+ */
+
+// const fakeNames = Array.from({ length: 10 }, name.firstName);
+// console.log(fakeNames);
+
+const fakeNames = Array.from(
+  { length: 10 },
+  () => `${name.firstName()} ${name.lastName()}`
+);
+// console.log(fakeNames);
+
+/**
+ * WAIT
+ */
+
+async function go() {
+  console.log("going");
+  await wait(2000);
+  console.log("ending");
+}
+
+// go();
+
+/**
+ * DATE-FNS
+ */
+
+const diff = formatDistance(
+  new Date(1986, 3, 4, 11, 32, 0),
+  new Date(1986, 3, 4, 10, 32, 0),
+  { addSuffix: true }
+); //= > 'in about 1 hour'
+
+console.log(diff);
+
+const diff2 = formatDistance(new Date(), new Date(2021, 7, 4, 10, 32, 0), {
+  addSuffix: true,
+});
+
+console.log(diff2);
+
+const diff3 = formatDistance(new Date(2021, 7, 4, 10, 32, 0), new Date(), {
+  addSuffix: true,
+});
+
+console.log(diff3);
+
+const myDate = new Date();
+// Format as January the 12th 2021
+// https://date-fns.org/v2.21.3/docs/format
+const formatted = format(myDate, `LLLL 'the' do y`);
+console.log(formatted);
+
+/**
+ * AXIOS
+ */
+async function getJoke() {
+  const { data } = await axios.get("https://icanhazdadjoke.com/", {
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  console.log(data.joke);
+}
+
+getJoke();
+
+/**
+ * LODASH
+ */
+
+const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const b = [5, 3, 8, 3, 7, 453, 34];
+
+// what are the same numbers that exist in both arrays
+const sameValues = intersection(a, b);
+console.log(sameValues);
+
+const p1 = { name: "wes" };
+const p2 = { name: "wes" };
+
+console.log(p1 === p2); // false
+
+// isEqual Performs a deep comparison between two values to determine if they are equivalent.
+console.log(isEqual(p1, p2)); // true
+
+/**
+ * AWAIT-TO-JS
+ */
+
+function checkIfNameIsCool(firstName) {
+  return new Promise(function (resolve, reject) {
+    if (firstName === "wes") {
+      resolve("cool name");
+    }
+
+    reject(new Error("not a cool name"));
+  });
+}
+
+async function checkName() {
+  // const nameDesc = await checkIfNameIsCool('wes');
+  // const nameDesc2 = await checkIfNameIsCool('jon');
+  // console.log(nameDesc);
+  // console.log(nameDesc2);
+
+  // using await-to-js
+  // always returns an array [error, resolve value]
+  const response = await to(checkIfNameIsCool("wes"));
+  console.log(response); // ['not a cool name', unedefined]
+  const response2 = await to(checkIfNameIsCool("jon"));
+  console.log(response2); // [null, 'cool name]
+
+  // destructure
+  const [err, successValue] = await to(checkIfNameIsCool("jim"));
+  if (err) {
+    // deal with it
+    console.log(err);
+  } else {
+    console.log(successValue);
+  }
+}
+
+checkName();
 ```
 
 ### Security

@@ -1,4 +1,5 @@
-import { hslToRgb } from './utils';
+// import { hslToRgb } from './utils'; // for parcel
+import { hslToRgb } from './utils.js';
 
 // Setup canvas
 const WIDTH = 1500;

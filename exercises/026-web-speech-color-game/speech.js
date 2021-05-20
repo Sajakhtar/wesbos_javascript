@@ -1,7 +1,9 @@
 // console.log('it works');
 
-import { handleResult } from './handlers'; // no need to add '.js' since we are using Parcel bundler
-import { colorsByLength, isDark } from './colors';
+// import { handleResult } from './handlers'; // no need to add '.js' since we are using Parcel bundler
+// import { colorsByLength, isDark } from './colors';
+import { handleResult } from './handlers.js';
+import { colorsByLength, isDark } from './colors.js';
 
 const colorsEl = document.querySelector('.colors');
 
