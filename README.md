@@ -4818,7 +4818,7 @@ buttons.forEach((button) =>
 );
 ```
 
-[See Live]()
+NOTE: Cannot see live on Github pages due to NPM modules issue: requiire using Jekyll to build the site.
 
 When sending data, always make sure you're sending it to a `HTTPS` origin (domain).
 
@@ -4832,7 +4832,7 @@ Whe send data via `POST` over insecure origin `HTTP`, malicious actors could pee
 
 ### Web Speech Colours Game
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/026-web-speech-color-game/index.html)
 
 In this exercise we make use of the speech recognition API in Chrome. Turn on by navigatin in the browser to `about:flags` and ensure `Experimental Web Platform Features` is Enabled.
 
@@ -4847,7 +4847,7 @@ Set up a server. In project folder
 
 ### Audio Visualization
 
-[See Live]()
+[See Live](https://sajakhtar.github.io/wesbos_javascript/exercises/027-audio-visualizer-oscilloscope/index.html)
 
 In this exercise we use the web browser audio API, to create a audio visualizer with frequency at the bottom of the page and an oscilloscope in the middle.
 
